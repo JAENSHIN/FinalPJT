@@ -1,33 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>지도 예제</title>
+    <link rel="stylesheet" th:href="@{/css/main_style.css}">
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53058506472e68663c191f4ba75fc7b0"></script>
     <style>
-        /* 페이지와 지도의 스타일을 설정합니다. */
         body, html {
-            margin: 0;  /* 여백 제거 */
-            padding: 0; /* 패딩 제거 */
-            height: 100%; /* 전체 높이 사용 */
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        #content {
+            flex: 1;
+            display: flex;
+        }
+        #sidebar {
+            width: 300px;
+            background-color: #f5f5f5;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            overflow-y: auto;
         }
         #map {
-            width: 100%; /* 전체 너비 사용 */
-            height: 100%; /* 전체 높이 사용 */
+            flex: 1;
+            height: 100%;
+        }
+        .chart {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div id="map"></div> <!-- 지도가 표시될 div -->
+
+    <div th:replace="header :: header"></div>
+
+    <div id="content">
+        <div id="sidebar">
+            <h2>상권 분석</h2>
+            <div class="chart">
+                <h3>전체 상권 등록 그래프</h3>
+                <div id="chart1"></div>
+            </div>
+            <div class="chart">
+                <h3>유동인구 분석</h3>
+                <div id="chart2"></div>
+            </div>
+        </div>
+    
+        <div id="map"></div>
+    </div>
 
     <script>
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+        var mapContainer = document.getElementById('map'),
             mapOption = { 
-                center: new kakao.maps.LatLng(37.5665, 126.9780), // 지도의 중심좌표
-                level: 3 // 지도의 확대 레벨
+                center: new kakao.maps.LatLng(37.5665, 126.9780),
+                level: 3 
             };
 
-        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        var circle = new kakao.maps.Circle({
+            center : new kakao.maps.LatLng(37.5665, 126.9780),
+            radius: 500,
+            strokeWeight: 5,
+            strokeColor: '#75B8FA',
+            strokeOpacity: 0.8,
+            strokeStyle: 'solid',
+            fillColor: '#CFE7FF',
+            fillOpacity: 0.5
+        });
+
+        circle.setMap(map);
     </script>
 </body>
 </html>
