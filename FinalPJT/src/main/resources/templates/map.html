@@ -4,35 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>지도 예제</title>
-    <link rel="stylesheet" th:href="@{/css/main_style.css}">
+    <link rel="stylesheet" th:href="@{/css/map_style.css}">
+    <link rel="stylesheet" th:href="@{/css/header_style.css}">
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53058506472e68663c191f4ba75fc7b0"></script>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        #content {
-            flex: 1;
-            display: flex;
-        }
-        #sidebar {
-            width: 300px;
-            background-color: #f5f5f5;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            overflow-y: auto;
-        }
-        #map {
-            flex: 1;
-            height: 100%;
-        }
-        .chart {
-            margin-top: 20px;
-        }
-    </style>
 </head>
 <body>
 
@@ -75,6 +49,17 @@
         });
 
         circle.setMap(map);
+     // 사이드바 토글 기능
+        const sidebar = document.getElementById('sidebar');
+        const toggleButton = document.getElementById('toggle-sidebar');
+        
+        toggleButton.addEventListener('click', () => {
+            if (sidebar.style.display === "none" || sidebar.style.display === "") {
+                sidebar.style.display = "block"; // 사이드바 보이기
+            } else {
+                sidebar.style.display = "none"; // 사이드바 숨기기
+            }
+        });
     </script>
 </body>
 </html>
