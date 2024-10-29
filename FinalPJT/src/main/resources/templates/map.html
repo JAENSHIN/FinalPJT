@@ -9,7 +9,6 @@
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53058506472e68663c191f4ba75fc7b0"></script>
 </head>
 <body>
-
     <div th:replace="header :: header"></div>
 
     <div id="content">
@@ -22,13 +21,26 @@
             <div class="chart">
                 <h3>유동인구 분석</h3>
                 <div id="chart2"></div>
+            </div>     
+            <div>
+                <label for="longitude">경도:</label>
+                <input type="text" id="longitude" readonly>
             </div>
+            <div>
+                <label for="latitude">위도:</label>
+                <input type="text" id="latitude" readonly>
+            </div>
+            <button id="send-coordinates">좌표 보내기</button>
         </div>
-    
-        <div id="map"></div>
+
+        <!-- 지도 표시 영역 -->
+        <div id="map" style="width:100%;height:400px;"></div>
     </div>
 
+    <button id="toggle-sidebar">사이드바 토글</button>
+
     <script>
+        // 지도 생성
         var mapContainer = document.getElementById('map'),
             mapOption = { 
                 center: new kakao.maps.LatLng(37.5665, 126.9780),
@@ -47,18 +59,43 @@
             fillColor: '#CFE7FF',
             fillOpacity: 0.5
         });
-
+        
         circle.setMap(map);
-     // 사이드바 토글 기능
+
         const sidebar = document.getElementById('sidebar');
         const toggleButton = document.getElementById('toggle-sidebar');
-        
+
         toggleButton.addEventListener('click', () => {
-            if (sidebar.style.display === "none" || sidebar.style.display === "") {
-                sidebar.style.display = "block"; // 사이드바 보이기
-            } else {
-                sidebar.style.display = "none"; // 사이드바 숨기기
-            }
+            sidebar.style.display = sidebar.style.display === "none" ? "block" : "none";
+        });
+
+        kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+            var latlng = mouseEvent.latLng;
+            document.getElementById('latitude').value = latlng.getLat();
+            document.getElementById('longitude').value = latlng.getLng();
+        });
+
+        document.getElementById('send-coordinates').addEventListener('click', function() {
+            var latitude = document.getElementById('latitude').value;
+            var longitude = document.getElementById('longitude').value;
+            var serviceKey = encodeURIComponent("/leCaqoLYYVmeyAYkuNsvs1fQEtCoHSfMZcTebr+oeVEfbrdqhUUTM4oEUKfwpX3r+hpC+XFc7hsktUcHW1OAg==");
+            var radius = 100; // 원하는 반경
+            var pageNo = 1; // 페이지 번호
+            var numOfRows = 10; // 한 페이지에 표시할 데이터 개수
+
+            fetch(`https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInRadius?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&radius=${radius}&cx=${longitude}&cy=${latitude}&type=json`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('서버 응답:', data); // 응답 데이터 처리
+                })
+                .catch(error => {
+                    console.error('오류 발생:', error);
+                });
         });
     </script>
 </body>
