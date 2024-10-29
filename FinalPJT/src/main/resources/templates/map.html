@@ -34,10 +34,9 @@
         </div>
 
         <!-- 지도 표시 영역 -->
-        <div id="map" style="width:100%;height:400px;"></div>
+        <div id="map" style="width:100%;height:auto;"></div>
     </div>
 
-    <button id="toggle-sidebar">사이드바 토글</button>
 
     <script>
         // 지도 생성
@@ -62,17 +61,15 @@
         
         circle.setMap(map);
 
-        const sidebar = document.getElementById('sidebar');
-        const toggleButton = document.getElementById('toggle-sidebar');
-
-        toggleButton.addEventListener('click', () => {
-            sidebar.style.display = sidebar.style.display === "none" ? "block" : "none";
-        });
-
+       
         kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
             var latlng = mouseEvent.latLng;
             document.getElementById('latitude').value = latlng.getLat();
             document.getElementById('longitude').value = latlng.getLng();
+            
+         // 클릭한 위치로 원의 중심을 이동하고 반경을 설정(충돌발생하면 지우면 안됨!)
+            circle.setPosition(latlng); // 원의 중심을 클릭한 위치로 설정
+            circle.setRadius(500); // 반경을 500m로 설정 (필요 시 사용자 설정으로 변경 가능)
         });
 
         document.getElementById('send-coordinates').addEventListener('click', function() {
