@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class mainController {
 
     // 메인 페이지 매핑
-    @GetMapping("/main")
+    @GetMapping(" ")
     public String main() {
         return "main"; // templates/main.html 반환
     }
