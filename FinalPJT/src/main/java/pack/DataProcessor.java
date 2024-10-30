@@ -35,15 +35,14 @@ public class DataProcessor implements ItemProcessor<OutputType, Store> {
         
 
         // API 요청 URL (여기서 YOUR_API_URL은 실제 API URL로 교체해야 합니다)
-        String url = String.format("%s?serviceKey=%s&pageNo=%s&numOfRows=%s&radius=%s&cx=%s&cy=%s&type=%s",
+        String url = String.format("%s?serviceKey=%s&pageNo=%s&numOfRows=%s&radius=%s&cx=%s&cy=%s&type=json",
         		apiUrl,
         		input.getServiceKey(),
                 input.getPageNo(),
                 input.getNumOfRows(),
                 input.getRadius(),
                 input.getCx(),
-                input.getCy(),
-                input.getType());
+                input.getCy());
 
         try {
             // API 호출

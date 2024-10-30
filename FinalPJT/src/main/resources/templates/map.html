@@ -24,15 +24,19 @@
                 <div id="chart2"></div>
             </div>     
             <div>
-                <label for="longitude">경도:</label>
-                <input type="text" id="longitude" readonly>
-            </div>
-            <div>
-                <label for="latitude">위도:</label>
-                <input type="text" id="latitude" readonly>
-            </div>
+			    <label for="longitude">경도:</label>
+			    <input type="text" id="longitude" readonly>
+			    <label for="latitude">위도:</label>
+			    <input type="text" id="latitude" readonly>
+			    <label for="radius">반경 (m):</label>
+			    <input type="number" id="radius" value="0" min="0" max="2000"> <!-- 기본값 설정 -->
+			</div>
+
             <button id="send-coordinates">좌표 보내기</button>
         </div>
+        
+        <!-- 비즈니스 목록을 표시할 div 요소 추가 -->
+        <div id="business-list"></div> 
 
         <!-- 지도 표시 영역 -->
         <div id="map" style="width:100%;height:auto;"></div>
@@ -40,61 +44,142 @@
 
 
     <script>
-        // 지도 생성
-        var mapContainer = document.getElementById('map'),
-            mapOption = { 
-                center: new kakao.maps.LatLng(37.5665, 126.9780),
-                level: 3 
-            };
+    // 지도 생성
+    var mapContainer = document.getElementById('map'),
+        mapOption = { 
+            center: new kakao.maps.LatLng(37.5665, 126.9780),
+            level: 3 
+        };
 
-        var map = new kakao.maps.Map(mapContainer, mapOption);
+    var map = new kakao.maps.Map(mapContainer, mapOption);
 
-        var circle = new kakao.maps.Circle({
-            center : new kakao.maps.LatLng(37.5665, 126.9780),
-            radius: 500,
-            strokeWeight: 5,
-            strokeColor: '#75B8FA',
-            strokeOpacity: 0.8,
-            strokeStyle: 'solid',
-            fillColor: '#CFE7FF',
-            fillOpacity: 0.5
-        });
+    var circle = new kakao.maps.Circle({
+        center : new kakao.maps.LatLng(37.5665, 126.9780),
+        radius: 0,
+        strokeWeight: 5,
+        strokeColor: '#75B8FA',
+        strokeOpacity: 0.8,
+        strokeStyle: 'solid',
+        fillColor: '#CFE7FF',
+        fillOpacity: 0.5
+    });
+    
+    circle.setMap(map);
+
+    let markers = []; // 마커를 저장할 배열
+   
+    kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+        var latlng = mouseEvent.latLng;
+        document.getElementById('latitude').value = latlng.getLat();
+        document.getElementById('longitude').value = latlng.getLng();
         
-        circle.setMap(map);
+     // 클릭한 위치로 원의 중심을 이동하고 반경을 설정(충돌발생하면 지우면 안됨!)
+        circle.setPosition(latlng); // 원의 중심을 클릭한 위치로 설정
+        circle.setRadius(parseInt(document.getElementById('radius').value) || 0); // 반경을 500m로 설정 (필요 시 사용자 설정으로 변경 가능)
+    });
 
-       
-        kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-            var latlng = mouseEvent.latLng;
-            document.getElementById('latitude').value = latlng.getLat();
-            document.getElementById('longitude').value = latlng.getLng();
-            
-         // 클릭한 위치로 원의 중심을 이동하고 반경을 설정(충돌발생하면 지우면 안됨!)
-            circle.setPosition(latlng); // 원의 중심을 클릭한 위치로 설정
-            circle.setRadius(500); // 반경을 500m로 설정 (필요 시 사용자 설정으로 변경 가능)
-        });
+    document.getElementById('send-coordinates').addEventListener('click', function() {
+        var latitude = document.getElementById('latitude').value;
+        var longitude = document.getElementById('longitude').value;
+        var radius = document.getElementById('radius').value; // 사용자가 입력한 반경값
+        
+     	// 범위 체크
+        if (radius < 0 || radius > 2000) {
+            alert('반경 값은 0에서 2000 사이여야 합니다.');
+            return; // 함수 종료
+        }
+        
+        var serviceKey = "%2FleCaqoLYYVmeyAYkuNsvs1fQEtCoHSfMZcTebr%2BoeVEfbrdqhUUTM4oEUKfwpX3r%2BhpC%2BXFc7hsktUcHW1OAg%3D%3D";
+        var pageNo = 1; 
+        var numOfRows = 10; 
 
-        document.getElementById('send-coordinates').addEventListener('click', function() {
-            var latitude = document.getElementById('latitude').value;
-            var longitude = document.getElementById('longitude').value;
-            var serviceKey = encodeURIComponent("/leCaqoLYYVmeyAYkuNsvs1fQEtCoHSfMZcTebr+oeVEfbrdqhUUTM4oEUKfwpX3r+hpC+XFc7hsktUcHW1OAg==");
-            var radius = 100; // 원하는 반경
-            var pageNo = 1; // 페이지 번호
-            var numOfRows = 10; // 한 페이지에 표시할 데이터 개수
+        fetch(`https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInRadius?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&radius=${radius}&cx=${longitude}&cy=${latitude}&type=json`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(jsonData => {
+                console.log('서버 응답:', jsonData);
+                updateSidebar(jsonData);
+                displayMarkers(jsonData); 
+            })
+            .catch(error => {
+                console.error('오류 발생:', error);
+            });
+    });
 
-            fetch(`https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInRadius?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&radius=${radius}&cx=${longitude}&cy=${latitude}&type=json`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    console.log('서버 응답:', data); // 응답 데이터 처리
-                })
-                .catch(error => {
-                    console.error('오류 발생:', error);
+			
+        function updateSidebar(data) {
+            const businessList = document.getElementById('business-list');
+            businessList.innerHTML = ''; // 초기화
+
+            if (data && Array.isArray(data.body.items)) {
+                data.body.items.forEach(business => {
+                    const div = document.createElement('div');
+                    div.innerHTML = `
+                        <h3>${business.bizesNm}</h3>
+                        <p>산업분류: ${business.ksicNm}</p>
+                        <p>지번주소: ${business.lnoAdr}</p>
+                        <p>도로명주소: ${business.rdnmAdr}</p>
+                        <p>경도: ${business.lon}, 위도: ${business.lat}</p>
+                    `;
+                    businessList.appendChild(div);
                 });
-        });
+            } else {
+                businessList.innerHTML = '<p>데이터를 불러오지 못했습니다.</p>';
+            }
+        }
+        
+        function isMarkerInRadius(markerPosition, centerPosition, radius) {
+            const R = 6371000; // 지구의 반지름 (미터)
+            const lat1 = centerPosition.getLat() * (Math.PI / 180);
+            const lat2 = markerPosition.getLat() * (Math.PI / 180);
+            const deltaLat = (markerPosition.getLat() - centerPosition.getLat()) * (Math.PI / 180);
+            const deltaLng = (markerPosition.getLng() - centerPosition.getLng()) * (Math.PI / 180);
+          
+            const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+                      Math.cos(lat1) * Math.cos(lat2) *
+                      Math.sin(deltaLng / 2) * Math.sin(deltaLng / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const distance = R * c; // 거리 계산
+
+            return distance <= radius; // 반경 내에 있는지 확인
+        }
+
+        function displayMarkers(data) {
+            markers.forEach(marker => {
+                marker.setMap(null);
+            });
+            markers = [];
+
+            const circleCenter = circle.getPosition(); // 원의 중심 좌표
+            const radius = circle.getRadius(); // 현재 반경
+
+            if (data && Array.isArray(data.body.items)) {
+                const validBusinesses = []; // 반경 내 비즈니스를 저장할 배열
+
+                data.body.items.forEach(business => {
+                    const position = new kakao.maps.LatLng(business.lat, business.lon);
+
+                    // 마커가 반경 내에 있는지 확인
+                    if (isMarkerInRadius(position, circleCenter, radius)) {
+                        const marker = new kakao.maps.Marker({
+                            position: position
+                        });
+                        marker.setMap(map);
+                        markers.push(marker); // 마커 배열에 추가
+                        validBusinesses.push(business); // 반경 내 비즈니스 배열에 추가
+                    }
+                });
+
+                updateSidebar({ body: { items: validBusinesses }}); // 반경 내 비즈니스만 사이드바에 업데이트
+            } else {
+                console.error("items가 없거나 데이터가 올바르지 않습니다.");
+            }
+        }
+
     </script>
 </body>
 </html>

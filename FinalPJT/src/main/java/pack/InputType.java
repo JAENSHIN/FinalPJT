@@ -4,23 +4,21 @@ public class InputType {
     private String serviceKey;  
     private String pageNo = "1"; // 기본값 설정
     private String numOfRows = "10"; // 기본값 설정
-    private double radius;      // 반경 입력 (미터 단위)
-    private double cx;          // 중심점 경도값 (WGS84)
-    private double cy;          // 중심점 위도값 (WGS84)
-    private String type; 
+    private String radius;      // 반경 입력 (미터 단위)
+    private String cx;          // 중심점 경도값 (WGS84)
+    private String cy;          // 중심점 위도값 (WGS84)
 
     // 기본 생성자
     public InputType() {}
 
     // 생성자
-    public InputType(String serviceKey, String pageNo, String numOfRows, double radius, double cx, double cy, String type) {
+    public InputType(String serviceKey, String pageNo, String numOfRows, String radius, String cx, String cy) {
         setServiceKey(serviceKey);
         setPageNo(pageNo);
         setNumOfRows(numOfRows);
         setRadius(radius);
         setCx(cx);
         setCy(cy);
-        setType(type);
     }
 
     // 게터와 세터
@@ -54,45 +52,47 @@ public class InputType {
         if (numOfRows == null || numOfRows.trim().isEmpty()) {
             throw new IllegalArgumentException("Number of rows cannot be null or empty");
         }
+        try {
+            Integer.parseInt(numOfRows); // 숫자로 변환 시도
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Number of rows must be a valid number");
+        }
         this.numOfRows = numOfRows;
     }
 
-    public double getRadius() {
+    public String getRadius() {
         return radius;
     }
 
-    public void setRadius(double radius) {
-        if (radius < 0) {
-            throw new IllegalArgumentException("Radius cannot be negative");
+    public void setRadius(String radius) {
+        if (radius == null || radius.trim().isEmpty()) {
+            throw new IllegalArgumentException("Radius cannot be null or empty");
         }
-        this.radius = radius;
+        try {
+            double radiusValue = Double.parseDouble(radius);
+            if (radiusValue < 0) {
+                throw new IllegalArgumentException("Radius cannot be negative");
+            }
+            this.radius = radius; // String으로 저장
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Radius must be a valid number");
+        }
     }
 
-    public double getCx() {
+    public String getCx() {
         return cx;
     }
 
-    public void setCx(double cx) {
+    public void setCx(String cx) {
         this.cx = cx;
     }
 
-    public double getCy() {
+    public String getCy() {
         return cy;
     }
 
-    public void setCy(double cy) {
+    public void setCy(String cy) {
         this.cy = cy;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        if (type == null || type.trim().isEmpty()) {
-            throw new IllegalArgumentException("Type cannot be null or empty");
-        }
-        this.type = type;
     }
 
     @Override
@@ -104,7 +104,6 @@ public class InputType {
                 ", radius=" + radius +
                 ", cx=" + cx +
                 ", cy=" + cy +
-                ", type='" + type + '\'' +
                 '}';
     }
 }

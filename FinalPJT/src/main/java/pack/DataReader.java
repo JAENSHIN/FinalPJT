@@ -4,10 +4,11 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.web.client.RestTemplate;
 import java.util.Iterator;
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 public class DataReader implements ItemReader<OutputType> {
     private RestTemplate restTemplate = new RestTemplate();
-    private String apiUrl = "http://apis.data.go.kr/B553077/api/open/sdsc2/storeListInArea";
+    private String apiUrl = "https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInArea";
     private int currentPage = 1;
     private int pageSize = 100; // 페이지 크기 설정
     private Iterator<OutputType> dataIterator;
@@ -37,11 +38,15 @@ public class DataReader implements ItemReader<OutputType> {
                      "&radius=" + inputType.getRadius() + 
                      "&cx=" + inputType.getCx() + 
                      "&cy=" + inputType.getCy() + 
-                     "&type=" + inputType.getType();
+                     "&type=json";
         
         try {
             ResponseType response = restTemplate.getForObject(url, ResponseType.class);
             // API 응답을 처리하고 OutputType 목록 반환
+            
+            ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+            System.out.println("API Response: " + responseEntity.getBody());
+            
             return response != null && response.getData() != null ? response.getData() : List.of(); 
         } catch (Exception e) {
             // API 호출 중 오류가 발생할 경우 예외 처리
