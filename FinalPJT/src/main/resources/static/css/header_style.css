@@ -1,4 +1,5 @@
 
+
 header {
     display: flex;
     align-items: center; 
@@ -27,7 +28,10 @@ header nav ul li a {
 }
 
 @media (max-width: 768px) {
-
+	body {
+        font-size: 1rem;
+        overflow-x: hidden; /* 좌우 스크롤 방지 */
+    }
 
     header {
         padding: 5px;
