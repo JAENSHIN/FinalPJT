@@ -4,10 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>지도 예제</title>
-    <link rel="stylesheet" th:href="@{/css/map_style.css}">
+    <link rel="stylesheet" th:href="@{/css/map_style.css}"> 
     <link rel="stylesheet" th:href="@{/css/header_style.css}">
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53058506472e68663c191f4ba75fc7b0&libraries=clusterer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Add Chart.js -->
 </head>
 <body>
     <div th:replace="header :: header"></div>
@@ -17,8 +16,8 @@
             <h2>상권 분석</h2>
             <div class="chart">
                 <h3>전체 상권 등록 그래프</h3>
-                <canvas id="ksicChart"></canvas>
-            </div>
+                <div id="chart1"></div>
+            </div> 
             <div class="chart">
                 <h3>유동인구 분석</h3>
                 <div id="chart2"></div>
@@ -122,23 +121,18 @@
 
         fetchAllData(); // 데이터 가져오기 시작
     });
-    let ksicChart; // 차트를 전역 변수로 정의
 
     function updateSidebar(data) {
         const businessList = document.getElementById('business-list');
         businessList.innerHTML = ''; // 초기화
 
         if (data && Array.isArray(data.body.items)) {
-            const groupedByKsicCd = groupBusinessesByKsicCd(data.body.items);
-            const chartData = prepareChartData(groupedByKsicCd, data.body.items); // 차트 데이터 준비
-            createChart(chartData.labels, chartData.data); // 차트 생성
-
             data.body.items.forEach(business => {
                 const div = document.createElement('div');
-                div.innerHTML =  
-                    `<h3>${business.bizesNm}</h3>
+                div.innerHTML = ` 
+                    <h3>${business.bizesNm}</h3>
                     <p>산업분류: ${business.ksicNm}</p>
-                    <p>산업분류 코드: ${business.ksicCd}</p>
+                    <p>산업분류: ${business.ksicCd}</p>
                     <p>지번주소: ${business.lnoAdr}</p>
                     <p>도로명주소: ${business.rdnmAdr}</p>
                     <p>경도: ${business.lon}, 위도: ${business.lat}</p>`;
@@ -148,72 +142,6 @@
             businessList.innerHTML = '<p>데이터를 불러오지 못했습니다.</p>';
         }
     }
-
-    function groupBusinessesByKsicCd(businesses) {
-        const grouped = {};
-
-        businesses.forEach(business => {
-            const ksicCd = business.ksicCd;
-            if (!grouped[ksicCd]) {
-                grouped[ksicCd] = {
-                    count: 0,
-                    name: business.ksicNm // 분류명을 저장
-                };
-            }
-            grouped[ksicCd].count++;
-        });
-
-        return grouped;
-    }
-
-    function prepareChartData(groupedData) {
-        const sortedEntries = Object.entries(groupedData).sort((a, b) => b[1].count - a[1].count);
-        const topEntries = sortedEntries.slice(0, 6);
-        const otherCount = sortedEntries.slice(6).reduce((sum, entry) => sum + entry[1].count, 0);
-
-        const labels = topEntries.map(entry => entry[1].name); // 분류명으로 변경
-        const data = topEntries.map(entry => entry[1].count);
-
-        // 기타 추가
-        if (otherCount > 0) {
-            labels.push('기타');
-            data.push(otherCount);
-        }
-
-        return { labels, data };
-    }
-
-    function createChart(labels, data) {
-        const ctx = document.getElementById('ksicChart').getContext('2d');
-
-        // 기존 차트가 있다면 제거
-        if (ksicChart) {
-            ksicChart.destroy();
-        }
-
-        ksicChart = new Chart(ctx, {
-            type: 'bar', // 그래프 타입
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: '산업분류 비율',
-                    data: data,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-
-
 
     // InfoWindow 생성
     const infowindow = new kakao.maps.InfoWindow({
