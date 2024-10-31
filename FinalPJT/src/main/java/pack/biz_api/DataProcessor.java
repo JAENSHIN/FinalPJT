@@ -1,12 +1,8 @@
-package pack;
+package pack.biz_api;
 
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
-
-import pack.biz_api.OutputType;
-import pack.biz_api.Store;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import java.util.List;
