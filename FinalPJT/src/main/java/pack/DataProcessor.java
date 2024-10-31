@@ -1,8 +1,12 @@
-package pack.biz_api;
+package pack;
 
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
+
+import pack.biz_api.OutputType;
+import pack.biz_api.Store;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import java.util.List;
@@ -18,6 +22,7 @@ public class DataProcessor implements ItemProcessor<OutputType, Store> {
         store.setLnoAddress(item.getLnoAddress()); // 지번 주소
         store.setRdnmAddress(item.getRdnmAddress()); // 도로명 주소
         store.setKsicName(item.getKsicName()); // KSIC 이름
+        store.setKsicCd(item.getKsicCd()); // 
 
         return store;
     }

@@ -1,4 +1,4 @@
-package pack.biz_api;
+package pack;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
