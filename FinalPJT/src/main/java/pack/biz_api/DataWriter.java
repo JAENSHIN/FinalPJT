@@ -1,4 +1,4 @@
-package pack;
+package pack.biz_api;
 
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;

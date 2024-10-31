@@ -1,4 +1,4 @@
-package pack;
+package pack.biz_api;
 
 public class OutputType {
     private String locationName;     // 예: 시군구 이름 또는 읍면동 이름

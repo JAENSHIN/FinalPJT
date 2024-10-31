@@ -1,4 +1,4 @@
-package pack;
+package pack.biz_api;
 
 public class InputType {
     private String serviceKey;  

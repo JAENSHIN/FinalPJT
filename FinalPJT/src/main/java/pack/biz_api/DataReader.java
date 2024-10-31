@@ -1,4 +1,4 @@
-package pack;
+package pack.biz_api;
 
 import org.springframework.batch.item.ItemReader;
 import org.springframework.web.client.RestTemplate;
