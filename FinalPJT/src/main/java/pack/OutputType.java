@@ -4,20 +4,21 @@ public class OutputType {
     private String locationName;     // 예: 시군구 이름 또는 읍면동 이름
     private String latitude;          // 위도
     private String longitude;         // 경도
-    private String additionalInfo;    // 추가 정보 (예: 특정 지표나 통계 정보)
     private String lnoAddress;        // 지번 주소
     private String rdnmAddress;       // 도로명 주소
     private String ksicName;		// 산업명
+    private String ksicCd;			// 산업 코드
     
     // 기본 생성자
     public OutputType() {}
 
     // 생성자
-    public OutputType(String locationName, String latitude, String longitude, String ksicName, String lnoAddress, String rdnmAddress) {
+    public OutputType(String locationName, String latitude, String longitude, String ksicName, String ksicCd, String lnoAddress, String rdnmAddress) {
         this.locationName = locationName;
         this.latitude = latitude;
         this.longitude = longitude;
         this.ksicName = ksicName;
+        this.ksicCd = ksicCd;
         this.lnoAddress = lnoAddress;    // 지번 주소
         this.rdnmAddress = rdnmAddress;  // 도로명 주소
     }
@@ -53,6 +54,14 @@ public class OutputType {
 
     public void setKsicName(String ksicName) {
         this.ksicName = ksicName;
+    }
+    
+    public String getKsicCd() {
+        return ksicName;
+    }
+
+    public void setKsicCd(String ksicCd) {
+        this.ksicCd = ksicCd;
     }
 
     public String getLnoAddress() {

@@ -18,6 +18,7 @@ public class DataProcessor implements ItemProcessor<OutputType, Store> {
         store.setLnoAddress(item.getLnoAddress()); // 지번 주소
         store.setRdnmAddress(item.getRdnmAddress()); // 도로명 주소
         store.setKsicName(item.getKsicName()); // KSIC 이름
+        store.setKsicCd(item.getKsicCd()); // 
 
         return store;
     }

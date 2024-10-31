@@ -14,6 +14,7 @@ public class Store {
 	
     private String businessName;
     private String ksicName;
+    private String ksicCd;
     private String lnoAddress;
     private String rdnmAddress;
     private double longitude;
@@ -38,7 +39,15 @@ public class Store {
     public void setKsicName(String ksicName) {
         this.ksicName = ksicName;
     }
+    
+    public String getKsicCd() {
+        return ksicCd;
+    }
 
+    public void setKsicCd(String ksicCd) {
+        this.ksicCd = ksicCd;
+    }
+    
     public String getLnoAddress() {
         return lnoAddress;
     }
