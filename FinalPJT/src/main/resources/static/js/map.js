@@ -78,23 +78,30 @@
     });
     let ksicChart; // 차트를 전역 변수로 정의
 
-    function updateSidebar(data) {
-        const businessList = document.getElementById('business-list');
-        businessList.innerHTML = ''; // 초기화
+	function updateSidebar(data) {
+	    const businessList = document.getElementById('business-list');
+	    businessList.innerHTML = ''; // 초기화
 
-        if (data && Array.isArray(data.body.items)) {
-            const groupedByKsicCd = groupBusinessesByKsicCd(data.body.items);
-            const chartData = prepareChartData(groupedByKsicCd, data.body.items); // 차트 데이터 준비
-            createChart(chartData.labels, chartData.data); // 차트 생성
+	    if (data && Array.isArray(data.body.items)) {
+	        const groupedByKsicCd = groupBusinessesByKsicCd(data.body.items);
+	        const chartData = prepareChartData(groupedByKsicCd, data.body.items); // 차트 데이터 준비
+	        createChart(chartData.labels, chartData.data); // 차트 생성
 
-            data.body.items.forEach(business => {
-                const div = document.createElement('div');
+	        // 가장 많은 카테고리 찾기
+	        const mostCommonCategory = Object.entries(groupedByKsicCd).reduce((prev, current) => {
+	            return (prev[1].count > current[1].count) ? prev : current;
+	        });
+	        document.getElementById('1st_category').innerText = `가장 많은 카테고리: ${mostCommonCategory[1].name} (${mostCommonCategory[1].count}개)`; // 카테고리와 개수 표시
 
-            });
-        } else {
-            businessList.innerHTML = '<p>데이터를 불러오지 못했습니다.</p>';
-        }
-    }
+	        data.body.items.forEach(business => {
+	            const div = document.createElement('div');
+	            // 여기에 비즈니스 정보를 추가하는 코드를 작성하세요.
+	        });
+	    } else {
+	        businessList.innerHTML = '<p>데이터를 불러오지 못했습니다.</p>';
+	    }
+	}
+
 
     function groupBusinessesByKsicCd(businesses) {
         const grouped = {};
