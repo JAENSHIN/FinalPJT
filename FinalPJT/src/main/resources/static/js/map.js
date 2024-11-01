@@ -10,7 +10,6 @@
     var circle = new kakao.maps.Circle({
         center: new kakao.maps.LatLng(37.5665, 126.9780),
         radius: 0,
-        strokeWeight: 5,
         strokeColor: '#75B8FA',
         strokeOpacity: 0.8,
         strokeStyle: 'solid',
@@ -53,29 +52,27 @@
         let pageNo = 1; // 초기 페이지 설정
         let allBusinesses = []; // 모든 비즈니스 정보를 저장할 배열
 
-        function fetchAllData() {
-            fetch(`https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInRadius?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}&radius=${radius}&cx=${longitude}&cy=${latitude}&type=json`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(jsonData => {
-                    if (jsonData && jsonData.body && Array.isArray(jsonData.body.items) && jsonData.body.items.length > 0) {
-                        allBusinesses = allBusinesses.concat(jsonData.body.items); // 항목 추가
-                        pageNo++; // 다음 페이지로 이동
-                        fetchAllData(); // 다음 페이지 호출
-                    } else {
-                        // 모든 데이터를 가져왔으면 업데이트 함수 호출
-                        updateSidebar({ body: { items: allBusinesses } });
-                        displayMarkers({ body: { items: allBusinesses } });
-                    }
-                })
-                .catch(error => {
-                    console.error('오류 발생:', error);
-                });
-        }
+       function fetchAllData() {
+		    const totalPages = 5; // 최대 페이지 수 (적절히 설정)
+		    const promises = [];
+
+		    for (let i = 1; i <= totalPages; i++) {
+		        const url = `https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInRadius?serviceKey=${serviceKey}&pageNo=${i}&numOfRows=${numOfRows}&radius=${radius}&cx=${longitude}&cy=${latitude}&type=json`;
+		        promises.push(fetch(url).then(response => response.json()));
+		    }
+
+		    Promise.all(promises)
+		        .then(responses => {
+		            const allBusinesses = responses.flatMap(response => response.body.items || []);
+		            updateSidebar({ body: { items: allBusinesses } });
+		            displayMarkers({ body: { items: allBusinesses } });
+		        })
+		        .catch(error => {
+		            console.error('오류 발생:', error);
+		        });
+		}
+
+
 
         fetchAllData(); // 데이터 가져오기 시작
     });
@@ -92,14 +89,7 @@
 
             data.body.items.forEach(business => {
                 const div = document.createElement('div');
-                div.innerHTML =  
-                    `<h3>${business.bizesNm}</h3>
-                    <p>산업분류: ${business.ksicNm}</p>
-                    <p>산업분류 코드: ${business.ksicCd}</p>
-                    <p>지번주소: ${business.lnoAdr}</p>
-                    <p>도로명주소: ${business.rdnmAdr}</p>
-                    <p>경도: ${business.lon}, 위도: ${business.lat}</p>`;
-                businessList.appendChild(div);
+
             });
         } else {
             businessList.innerHTML = '<p>데이터를 불러오지 못했습니다.</p>';
@@ -140,36 +130,48 @@
         return { labels, data };
     }
 
-    function createChart(labels, data) {
-        const ctx = document.getElementById('ksicChart').getContext('2d');
 
-        // 기존 차트가 있다면 제거
-        if (ksicChart) {
-            ksicChart.destroy();
-        }
+	function createChart(labels, data) {
+	    const ctx = document.getElementById('ksicChart').getContext('2d');
 
-        ksicChart = new Chart(ctx, {
-            type: 'bar', // 그래프 타입
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: '산업분류 비율',
-                    data: data,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
+	    // 기존 차트가 있다면 제거
+	    if (ksicChart) {
+	        ksicChart.destroy();
+	    }
 
+	    // 데이터 값에 따라 바의 크기를 조정
+	    const dataset = data.map(value => ({
+	        value: value,
+	        backgroundColor: `rgba(75, 192, 192, ${value / Math.max(...data)})`, // 값에 따라 색상 조정
+	        borderColor: 'rgba(75, 192, 192, 1)',
+	        borderWidth: 1
+	    }));
+
+	    ksicChart = new Chart(ctx, {
+	        type: 'bar', // 그래프 타입
+	        data: {
+	            labels: labels,
+	            datasets: [{
+	                label: '산업분류 비율',
+	                data: data,
+	                backgroundColor: dataset.map(d => d.backgroundColor),
+	                borderColor: dataset.map(d => d.borderColor),
+	                borderWidth: dataset.map(d => d.borderWidth)
+	            }]
+	        },
+	        options: {
+	            scales: {
+	                y: {
+	                    beginAtZero: true,
+	                    ticks: {
+	                        // y축 값에 따라 바의 최대 높이를 조정
+	                        max: Math.max(...data) * 1.2 // 데이터의 최대값의 120%로 설정
+	                    }
+	                }
+	            }
+	        }
+	    });
+	}
 
 
     // InfoWindow 생성
