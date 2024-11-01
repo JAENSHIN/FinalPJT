@@ -73,6 +73,7 @@
 		}
 
 
+
         fetchAllData(); // 데이터 가져오기 시작
     });
     let ksicChart; // 차트를 전역 변수로 정의
@@ -88,7 +89,7 @@
 
             data.body.items.forEach(business => {
                 const div = document.createElement('div');
-                
+
             });
         } else {
             businessList.innerHTML = '<p>데이터를 불러오지 못했습니다.</p>';
@@ -128,6 +129,7 @@
 
         return { labels, data };
     }
+
 
 	function createChart(labels, data) {
 	    const ctx = document.getElementById('ksicChart').getContext('2d');
@@ -170,6 +172,7 @@
 	        }
 	    });
 	}
+
 
     // InfoWindow 생성
     const infowindow = new kakao.maps.InfoWindow({
