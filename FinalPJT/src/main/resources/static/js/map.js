@@ -1,3 +1,4 @@
+
 import { groupBusinessesByKsicCd } from './mapping.js';
 import { updateSidebar } from './api.js';
 
