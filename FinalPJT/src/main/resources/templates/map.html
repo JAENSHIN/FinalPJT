@@ -6,10 +6,12 @@
     <title>지도 예제</title>
     <link rel="stylesheet" th:href="@{/css/map_style.css}">
     <link rel="stylesheet" th:href="@{/css/header_style.css}">
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53058506472e68663c191f4ba75fc7b0&libraries=clusterer"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53058506472e68663c191f4ba75fc7b0&libraries=clusterer,services"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" th:src="@{/js/api.js}"></script>
 	<script type="module" th:src="@{/js/map.js}"></script>
+	<script type="module" th:src="@{/js/addressSearch.js}"></script>
+	
 </head>
 <body>
     <div th:replace="header :: header"></div>
@@ -21,6 +23,7 @@
         		<label for="address">주소 검색:</label>
         		<input type="text" id="address" placeholder="주소를 입력하세요">
         		<button id="searchButton">검색</button>
+        		<ul id="searchResults" class="search-results"></ul> 
     		</div>
     		<div class="chart">
                 <h3>일반 업종 그룹 분석</h3>

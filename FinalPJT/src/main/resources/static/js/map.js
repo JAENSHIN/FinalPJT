@@ -10,7 +10,7 @@ var mapContainer = document.getElementById('map'),
         level: 3 
     };
 
-var map = new kakao.maps.Map(mapContainer, mapOption);
+export var map = new kakao.maps.Map(mapContainer, mapOption);
 
 var circle = new kakao.maps.Circle({
     center: new kakao.maps.LatLng(37.5665, 126.9780),
