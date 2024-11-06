@@ -2,6 +2,26 @@
 import { map } from './map.js'; // map 객체를 가져옴
 
 document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.getElementById('sidebar');
+    const handle = document.getElementById('sidebar-handle');
+    let isSidebarVisible = false;
+
+    // 핸들을 클릭해서 사이드바를 올리거나 내리기
+    handle.addEventListener('click', function() {
+        if (isSidebarVisible) {
+            sidebar.style.transform = 'translateY(100%)'; // 사이드바 숨기기
+        } else {
+            sidebar.style.transform = 'translateY(0)'; // 사이드바 올리기
+        }
+        isSidebarVisible = !isSidebarVisible;
+    });
+
+    // 웹 페이지에서 지도를 고정하고, 사이드바만 스크롤 가능하도록 설정
+    document.body.style.overflow = 'auto'; // 본문 스크롤 가능
+    const content = document.getElementById('content');
+    content.style.overflow = 'hidden'; // #content 영역은 스크롤 고정
+    sidebar.style.overflowY = 'auto'; // 사이드바 스크롤 가능
+
     const places = new kakao.maps.services.Places(); // 장소 검색 객체 생성
 
     document.getElementById('searchButton').addEventListener('click', function() {
