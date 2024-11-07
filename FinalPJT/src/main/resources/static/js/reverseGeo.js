@@ -1,4 +1,5 @@
 	import { pplsummary } from './pplsummary.js';
+	import { gndrSummary } from './gndrSummary.js';
 	
 	var accessToken = 'none';
 	var errCnt = 0;
@@ -83,6 +84,8 @@
 	
 	                // pplsummary 함수 호출
 	                pplsummary(accessToken, adminDistrictCode);
+					// gndrSummary 함수 호출
+	                gndrSummary(accessToken, adminDistrictCode);
 	            } else {
 	                console.warn('The result array is empty.');
 	            }
