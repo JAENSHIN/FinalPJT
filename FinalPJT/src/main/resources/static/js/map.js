@@ -32,56 +32,49 @@ const markerClusterer = new kakao.maps.MarkerClusterer({
     minLevel: 10 // 클러스터링 시작 레벨
 });
    
+import { reverseGeo } from './reverseGeo.js';
+
+// 클릭 이벤트 수정
 kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
     var latlng = mouseEvent.latLng;
     document.getElementById('latitude').value = latlng.getLat();
     document.getElementById('longitude').value = latlng.getLng();
 
-    // 클릭한 위치로 원의 중심을 이동하고 반경을 설정
+    // 반경 설정
+    const radius = parseInt(document.getElementById('radius').value) || 100; // 기본값 100m
     circle.setPosition(latlng);
-    circle.setRadius(parseInt(document.getElementById('radius').value) || 0);
+    circle.setRadius(radius);
+
+    // 상권 데이터 가져오기
+    fetchAllData(latlng.getLat(), latlng.getLng(), radius);
+
+    // 인구 데이터 가져오기
+    reverseGeo(latlng.getLng(), latlng.getLat()); // 경도와 위도를 reverseGeo 함수에 전달
 });
-	
-document.getElementById('send-coordinates').addEventListener('click', function() {
-    const latitude = document.getElementById('latitude').value;
-    const longitude = document.getElementById('longitude').value;
-    const radius = document.getElementById('radius').value;
 
-    // 범위 체크
-    if (radius < 0 || radius > 2000) {
-        alert('반경 값은 0에서 2000 사이여야 합니다.');
-        return;
-    }
-
+// fetchAllData 함수 - 상권 정보를 가져오는 기존 함수
+function fetchAllData(latitude, longitude, radius) {
     const serviceKey = "%2FleCaqoLYYVmeyAYkuNsvs1fQEtCoHSfMZcTebr%2BoeVEfbrdqhUUTM4oEUKfwpX3r%2BhpC%2BXFc7hsktUcHW1OAg%3D%3D"; // 서비스 키를 입력하세요
-    const numOfRows = 10; // 페이지당 항목 수
-    let pageNo = 1; // 초기 페이지 설정
-    let allBusinesses = []; // 모든 비즈니스 정보를 저장할 배열
+    const numOfRows = 10;
+    const totalPages = 5;
+    const promises = [];
 
-    function fetchAllData() {
-        const totalPages = 5; // 최대 페이지 수 (적절히 설정)
-        const promises = [];
-
-        for (let i = 1; i <= totalPages; i++) {
-            const url = `https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInRadius?serviceKey=${serviceKey}&pageNo=${i}&numOfRows=${numOfRows}&radius=${radius}&cx=${longitude}&cy=${latitude}&type=json`;
-            promises.push(fetch(url).then(response => response.json()));
-        }
-
-        Promise.all(promises)
-            .then(responses => {
-                const allBusinesses = responses.flatMap(response => response.body.items || []);
-                updateSidebar({ body: { items: allBusinesses } });
-                displayMarkers({ body: { items: allBusinesses } });
-            })
-            .catch(error => {
-                console.error('오류 발생:', error);
-            });
+    for (let i = 1; i <= totalPages; i++) {
+        const url = `https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInRadius?serviceKey=${serviceKey}&pageNo=${i}&numOfRows=${numOfRows}&radius=${radius}&cx=${longitude}&cy=${latitude}&type=json`;
+        promises.push(fetch(url).then(response => response.json()));
     }
 
+    Promise.all(promises)
+        .then(responses => {
+            const allBusinesses = responses.flatMap(response => response.body.items || []);
+            updateSidebar({ body: { items: allBusinesses } });
+            displayMarkers({ body: { items: allBusinesses } });
+        })
+        .catch(error => {
+            console.error('오류 발생:', error);
+        });
+}
 
-    fetchAllData(); // 데이터 가져오기 시작 
-
-});
 
 // InfoWindow 생성
 const infowindow = new kakao.maps.InfoWindow({
