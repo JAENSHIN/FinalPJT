@@ -57,7 +57,7 @@
 	    }
 	});
 	
-	function reverseGeo(longitude, latitude) {
+	export function reverseGeo(longitude, latitude) {
 	    const addr_type = 21;
 	
 	    fetch(`https://sgisapi.kostat.go.kr/OpenAPI3/addr/rgeocodewgs84.json?accessToken=${accessToken}&x_coor=${longitude}&y_coor=${latitude}&addr_type=${addr_type}`, {
