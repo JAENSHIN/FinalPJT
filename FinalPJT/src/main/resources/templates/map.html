@@ -6,41 +6,39 @@
     <title>지도 예제</title>
     <link rel="stylesheet" th:href="@{/css/map_style.css}">
     <link rel="stylesheet" th:href="@{/css/header_style.css}">
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53058506472e68663c191f4ba75fc7b0&libraries=clusterer,services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53058506472e68663c191f4ba75fc7b0&libraries=clusterer,services"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" th:src="@{/js/api.js}"></script>
 	<script type="module" th:src="@{/js/map.js}"></script>
 	<script type="module" th:src="@{/js/addressSearch.js}"></script>
+	<script type="module" th:src="@{/js/reverseGeo.js}"></script>
+	<script type="module" th:src="@{/js/pplsummary.js}"></script>
 </head>
 <body>
     <div th:replace="header :: header"></div>
 
     <div id="content">
-        <div id="map-container">
-            <div id="map"></div>
-        </div>
-
         <div id="sidebar">
-            <div id="sidebar-handle"></div>
+            <div id="sidebar-handle"></div> <!-- 핸들 추가 -->
             <h2>상권 분석</h2>
             <div>
-                <label for="address">주소 검색:</label>
-                <input type="text" id="address" placeholder="주소를 입력하세요">
-                <button id="searchButton">검색</button>
-                <ul id="searchResults" class="search-results"></ul>
-            </div>
-            <div class="chart">
+        		<label for="address">주소 검색:</label>
+        		<input type="text" id="address" placeholder="주소를 입력하세요">
+        		<button id="searchButton">검색</button>
+        		<ul id="searchResults" class="search-results"></ul> 
+    		</div>
+    		<div class="chart">
                 <h3>일반 업종 그룹 분석</h3>
-                <canvas id="industryChart" style="width: 100%; height: 400px;"></canvas>
+                <canvas id="industryChart" style="width: 100%; height: 400px;"></canvas> <!-- 일반 업종 그룹 차트 -->
             </div>
             <div class="chart">
                 <h3>기업 그룹 분석</h3>
-                <canvas id="ksicChart" style="width: 100%; height: 400px;"></canvas>
+                <canvas id="ksicChart" style="width: 100%; height: 400px;"></canvas> <!-- 기업 그룹 차트 -->
             </div>
             <div class="chart">
                 <h3>유동인구 분석</h3>
                 <div id="chart2"></div>
-            </div>
+            </div>     
             <div>
                 <label for="longitude">경도:</label>
                 <input type="text" id="longitude" readonly>
@@ -52,6 +50,10 @@
 
             <button id="send-coordinates">좌표 보내기</button>
         </div>
-    </div>
+        
+        <div id="business-list"></div> 
+
+        <div id="map" style="width:100%;height:auto;"></div>
+    </div>   
 </body>
 </html>
