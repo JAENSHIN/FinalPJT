@@ -78,7 +78,9 @@ document.getElementById('send-coordinates').addEventListener('click', function()
             });
     }
 
-    fetchAllData(); 
+
+    fetchAllData(); // 데이터 가져오기 시작 
+
 });
 
 // InfoWindow 생성
