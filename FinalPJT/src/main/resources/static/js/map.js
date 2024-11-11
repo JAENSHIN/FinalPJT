@@ -53,7 +53,7 @@ document.getElementById('send-coordinates').addEventListener('click', function()
         return;
     }
 
-    /*const serviceKey = "%2FleCaqoLYYVmeyAYkuNsvs1fQEtCoHSfMZcTebr%2BoeVEfbrdqhUUTM4oEUKfwpX3r%2BhpC%2BXFc7hsktUcHW1OAg%3D%3D"; // 서비스 키를 입력하세요
+    const serviceKey = "%2FleCaqoLYYVmeyAYkuNsvs1fQEtCoHSfMZcTebr%2BoeVEfbrdqhUUTM4oEUKfwpX3r%2BhpC%2BXFc7hsktUcHW1OAg%3D%3D"; // 서비스 키를 입력하세요
     const numOfRows = 10; // 페이지당 항목 수
     let pageNo = 1; // 초기 페이지 설정
     let allBusinesses = []; // 모든 비즈니스 정보를 저장할 배열
@@ -78,7 +78,7 @@ document.getElementById('send-coordinates').addEventListener('click', function()
             });
     }
 
-    fetchAllData(); // 데이터 가져오기 시작 */
+    fetchAllData(); // 데이터 가져오기 시작 
 });
 
 // InfoWindow 생성

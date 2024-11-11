@@ -9,7 +9,7 @@
 	  const url = `https://apis.data.go.kr/1421000/mssBizService_v2/getbizList_v2?serviceKey=${serviceKey}&pageNo=${pageNo}&numOfRows=${numOfRows}`;
 	  const response = await fetch(url);
 	  const data = await response.text();
-	  
+	  	
 	  const parser = new DOMParser();
 	  const xmlDoc = parser.parseFromString(data, "application/xml");
 	
@@ -31,13 +31,21 @@
 	        <h3>${item.getElementsByTagName("title")[0]?.textContent || "제목 없음"}</h3>
 	        <p>${item.getElementsByTagName("dataContents")[0]?.textContent || "내용 없음"}</p>
 			<p><strong>작성자:</strong> ${item.getElementsByTagName("writerName")[0]?.textContent || "정보 없음"}</p>
-			<p>${item.getElementsByTagName("writerPosition")[0]?.textContent || "내용 없음"}</p>
+			<p><strong>담당부서:</strong>${item.getElementsByTagName("writerPosition")[0]?.textContent || "내용 없음"}</p>
 			<p><strong>연락처:</strong> ${item.getElementsByTagName("writerPhone")[0]?.textContent || "정보 없음"}</p>
-			<p>${item.getElementsByTagName("writerEmail")[0]?.textContent || "내용 없음"}</p>
-			<p>${item.getElementsByTagName("viewUrl")[0]?.textContent || "내용 없음"}</p>
+			<p><strong>이메일:</strong>${item.getElementsByTagName("writerEmail")[0]?.textContent || "내용 없음"}</p>
+			<p><strong>신청기간:</strong>${item.getElementsByTagName("applicationStartDate")[0]?.textContent || ""} ~ ${item.getElementsByTagName("applicationEndDate")[0]?.textContent || ""}</p>
+			<p>
+			  <strong>링크:</strong> 
+			  ${
+			    item.getElementsByTagName("viewUrl")[0]?.textContent 
+			      ? `<a href="${item.getElementsByTagName("viewUrl")[0].textContent}" target="_blank">${item.getElementsByTagName("viewUrl")[0].textContent}</a>` 
+			      : "내용 없음"
+			  }
+			</p>
 			
 			</div>
-	      <hr>
+	      <hr>	
 	    `;
 	    contentDiv.innerHTML += itemHtml;
 	  }
