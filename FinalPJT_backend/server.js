@@ -287,7 +287,7 @@ cron.schedule('0 2 * * *', () => {
 });
 
 // 정적 파일 제공
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('C:\\Users\\gram\\git\\FinalPJT\\FinalPJT\\src\\main\\resources\\templates'));
 
 // API 엔드포인트: /api/getData?page=1&numOfRows=5
 app.get('/api/getData', async (req, res) => {
@@ -314,12 +314,14 @@ app.get('/api/getData', async (req, res) => {
         const totalCount = countResult[0].count;
         const totalPages = Math.ceil(totalCount / limit);
 
+		const query = `SELECT * FROM biz_list ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`;
+		const [rows] = await connection.query(query);		
+		
         // 데이터 조회 쿼리 실행
-        const [rows] = await connection.execute(
-            'SELECT * FROM biz_list ORDER BY id DESC LIMIT ? OFFSET ?',
-            [limit, offset]
-        );
-
+		/*const [rows] = await connection.query(
+		    `SELECT * FROM biz_list ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`
+		);	
+*/
         await connection.end();
 
         // 결과 응답
