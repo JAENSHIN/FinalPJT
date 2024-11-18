@@ -1,0 +1,62 @@
+
+
+header {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    padding: 1vh 5vw; /* 뷰포트 너비에 따라 패딩 조절 */
+    background-color: #fff;
+}
+
+header .logo {
+    width: 10vw; /* 뷰포트 너비 기준으로 로고 크기 조정 */
+    height: auto;
+    padding: 0vh;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2vw; /* 뷰포트 너비 기준으로 메뉴 간격 조정 */
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.2rem; /* 폰트 크기를 상대 단위로 설정 */
+}
+
+@media (max-width: 768px) {
+	body {
+        font-size: 1rem;
+        overflow-x: hidden; /* 좌우 스크롤 방지 */
+    }
+
+    header {
+        padding: 5px;
+        justify-content: space-between;
+    }
+
+    header .logo {
+        width: 100px; /* 작은 화면에서 로고 크기 조정 */
+    }
+
+    header nav {
+        display: flex; /* nav 내부의 요소를 flex 컨테이너로 설정 */
+        justify-content: center; /* 메뉴를 중앙 정렬 */
+        width: 100%; /* nav가 뷰포트 너비에 맞게 설정 */
+    }
+
+    header nav ul {
+        display: flex;
+        gap: 20px; /* 메뉴 간의 간격을 작게 조정 */
+    }
+
+    header nav ul li a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        font-size: 0.8rem; /* 폰트 크기를 상대 단위로 설정 */
+    }
+}

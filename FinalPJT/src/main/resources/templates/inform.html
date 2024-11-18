@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>API 데이터 표시</title>
+    <style>
+        .content { max-width: 800px; margin: auto; }
+        .item { padding: 10px; }
+        hr { border: 0; border-top: 1px solid #ccc; }
+        .pagination { text-align: center; margin-top: 20px; }
+        .pagination button { padding: 10px 20px; margin: 0 5px; }
+        .loading { font-size: 1.2em; }
+    </style>
+</head>
+<body>
+    <div class="content"></div>
+    <div class="loading">로딩 중...</div>
+    <div class="pagination">
+        <button onclick="prevPage()">이전</button>
+        <span id="pageNumber">1</span> / <span id="totalPages">1</span>
+        <button onclick="nextPage()">다음</button>
+    </div>
+
+    <script>
+        // API 기본 정보
+        const numOfRows = 5;  // 한 페이지에 보여줄 데이터 개수
+        let pageNo = 1;        // 현재 페이지 번호
+        let totalPages = 1;    // 전체 페이지 수
+
+        // 데이터를 가져와 화면에 표시하는 함수
+        async function fetchData() {
+        	const url = `http://localhost:3000/api/getData?page=${pageNo}&numOfRows=${numOfRows}`;
+            const loadingDiv = document.querySelector('.loading');
+            const contentDiv = document.querySelector('.content');
+            loadingDiv.style.display = 'block';
+            contentDiv.innerHTML = '';  // 이전 데이터를 지움
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('네트워크 응답이 올바르지 않습니다.');
+                }
+                const data = await response.json();
+
+                totalPages = data.totalPages;
+
+                data.items.forEach(item => {
+                    const itemHtml = `
+                        <div class="item">
+                            <h3>${item.title || "제목 없음"}</h3>
+                            <p>${item.dataContents || "내용 없음"}</p>
+                            <p><strong>작성자:</strong> ${item.writerName || "정보 없음"}</p>
+                            <p><strong>담당부서:</strong> ${item.writerPosition || "내용 없음"}</p>
+                            <p><strong>연락처:</strong> ${item.writerPhone || "정보 없음"}</p>
+                            <p><strong>이메일:</strong> ${item.writerEmail || "내용 없음"}</p>
+                            <p><strong>신청기간:</strong> ${item.applicationStartDate || ""} ~ ${item.applicationEndDate || ""}</p>
+                            <p>
+                                <strong>링크:</strong> 
+                                ${
+                                    item.viewUrl !== "내용 없음" 
+                                    ? `<a href="${item.viewUrl}" target="_blank">${item.viewUrl}</a>` 
+                                    : "내용 없음"
+                                }
+                            </p>
+                        </div>
+                        <hr>
+                    `;
+                    contentDiv.innerHTML += itemHtml;
+                });
+
+                // 페이지 번호 업데이트
+                document.getElementById('pageNumber').textContent = pageNo;
+                document.getElementById('totalPages').textContent = totalPages;
+            } catch (error) {
+                console.error('데이터를 가져오는 중 오류가 발생했습니다:', error);
+                const contentDiv = document.querySelector('.content');
+                contentDiv.innerHTML = '<p>데이터를 불러오는 데 오류가 발생했습니다.</p>';
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        }
+
+        // 페이지 넘김 함수
+        function nextPage() {
+            if (pageNo < totalPages) {
+                pageNo++;
+                fetchData();
+            }
+        }
+
+        function prevPage() {
+            if (pageNo > 1) {
+                pageNo--;
+                fetchData();
+            }
+        }
+
+        // 초기 데이터 로드
+        fetchData();
+    </script>
+</body>
+</html>
