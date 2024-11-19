@@ -138,3 +138,19 @@ function createChart(chartId, labels, data, title) {
 		   });
 }
 }
+// 버튼과 섹션 DOM 요소 가져오기
+const businessInfoBtn = document.getElementById("business-info-btn");
+const populationInfoBtn = document.getElementById("population-info-btn");
+const businessInfoSection = document.getElementById("business-info-section");
+const populationInfoSection = document.getElementById("population-info-section");
+
+// 버튼 클릭 이벤트 핸들러
+businessInfoBtn.addEventListener("click", () => {
+    businessInfoSection.style.display = "block"; // 상권정보 섹션 보이기
+    populationInfoSection.style.display = "none"; // 인구정보 섹션 숨기기
+});
+
+populationInfoBtn.addEventListener("click", () => {
+    populationInfoSection.style.display = "block"; // 인구정보 섹션 보이기
+    businessInfoSection.style.display = "none"; // 상권정보 섹션 숨기기
+});

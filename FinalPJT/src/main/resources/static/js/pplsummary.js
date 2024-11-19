@@ -1,4 +1,6 @@
-	export function pplsummary(accessToken, adm_cd) {
+import { createPopulationChart, createGenderChart } from './populationChart.js';
+	
+export function pplsummary(accessToken, adm_cd) {
 	    if (!adm_cd) {
 	        console.error('Administrative code (adm_cd) is not available.');
 	        return; // adm_cd가 없으면 함수를 종료
@@ -22,25 +24,19 @@
 	        if (parseInt(data.errCd) === 0) {
 	            // 데이터 파싱
 	            const result = data.result[0];
-	            if (result) {
-	                console.log('행정구역 이름:', result.adm_nm);
-	                console.log('10대 미만 인구비율:', result.teenage_less_than_per);
-	                console.log('10대 미만 인구수:', result.teenage_less_than_cnt);
-	                console.log('10대 인구비율:', result.teenage_per);
-	                console.log('10대 인구수:', result.teenage_cnt);
-	                console.log('20대 인구비율:', result.twenty_per);
-	                console.log('20대 인구수:', result.twenty_cnt);
-	                console.log('30대 인구비율:', result.thirty_per);
-	                console.log('30대 인구수:', result.thirty_cnt);
-	                console.log('40대 인구비율:', result.forty_per);
-	                console.log('40대 인구수:', result.forty_cnt);
-	                console.log('50대 인구비율:', result.fifty_per);
-	                console.log('50대 인구수:', result.fifty_cnt);
-	                console.log('60대 인구비율:', result.sixty_per);
-	                console.log('60대 인구수:', result.sixty_cnt);
-	                console.log('70대 이상 인구비율:', result.seventy_more_than_per);
-	                console.log('70대 이상 인구수:', result.seventy_more_than_cnt);
-	            } else {
+				if (result) {
+				                    const ageData = {
+				                        "10대 미만": result.teenage_less_than_cnt,
+				                        "10대": result.teenage_cnt,
+				                        "20대": result.twenty_cnt,
+				                        "30대": result.thirty_cnt,
+				                        "40대": result.forty_cnt,
+				                        "50대": result.fifty_cnt,
+				                        "60대": result.sixty_cnt,
+				                        "70대 이상": result.seventy_more_than_cnt
+				                    };
+				                    createPopulationChart(ageData);
+				                } else {
 	                console.warn('No result found in response data.');
 	            }
 	        } else if (parseInt(data.errCd) === -401) {

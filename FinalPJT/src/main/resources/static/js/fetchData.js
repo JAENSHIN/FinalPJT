@@ -20,14 +20,20 @@ async function fetchData() {
         const data = await response.json();
 
         totalPages = data.totalPages;
+		// 날짜를 'YYYY-MM-DD' 형식으로 변환하는 함수
+		function formatDate(dateString) {
+		    if (!dateString) return ""; // dateString이 없으면 빈 문자열 반환
+		    const date = new Date(dateString);
+		    return date.toISOString().split('T')[0]; // 'T'를 기준으로 나누고 첫 번째 부분 반환
+		}
 
         data.items.forEach(item => {
             const itemHtml = `
                 <li class="program-item">
-                    <span class="tag">사업화</span>
+                    <span class="tag">중소벤처기업부</span>
                     <h3>${item.title || "제목 없음"}</h3>
-                    <p>${item.dataContents || "내용 없음"} | ${item.writerName || "정보 없음"} | 
-                       ${item.applicationStartDate || ""} ~ ${item.applicationEndDate || ""}</p>
+                    <p>${item.writerPosition || "정보 없음"} | 
+					${formatDate(item.applicationStartDate)} ~ ${formatDate(item.applicationEndDate)}</p>
                 </li>
             `;
             contentDiv.innerHTML += itemHtml;
