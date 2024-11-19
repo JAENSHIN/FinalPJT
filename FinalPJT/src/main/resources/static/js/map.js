@@ -35,22 +35,20 @@ const markerClusterer = new kakao.maps.MarkerClusterer({
 import { reverseGeo } from './reverseGeo.js';
 
 // 클릭 이벤트 수정
+// 지도 클릭 이벤트
 kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
     var latlng = mouseEvent.latLng;
-    document.getElementById('latitude').value = latlng.getLat();
-    document.getElementById('longitude').value = latlng.getLng();
+    const radius = 100; // 반경 값을 고정 (100m)
 
-    // 반경 설정
-    const radius = parseInt(document.getElementById('radius').value) || 100; // 기본값 100m
+    // 클릭한 좌표에 반경 설정
     circle.setPosition(latlng);
     circle.setRadius(radius);
 
-    // 상권 데이터 가져오기
+    // 상권 데이터와 인구 데이터를 가져옵니다.
     fetchAllData(latlng.getLat(), latlng.getLng(), radius);
-
-    // 인구 데이터 가져오기
-    reverseGeo(latlng.getLng(), latlng.getLat()); // 경도와 위도를 reverseGeo 함수에 전달
+    reverseGeo(latlng.getLng(), latlng.getLat());
 });
+
 
 // fetchAllData 함수 - 상권 정보를 가져오는 기존 함수
 function fetchAllData(latitude, longitude, radius) {

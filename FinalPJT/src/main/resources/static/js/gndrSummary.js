@@ -56,3 +56,4 @@ export function gndrSummary(accessToken, adm_cd) {
         console.error('Error getting population summary data:', error);
     });
 }
+

@@ -1,6 +1,23 @@
 	import { pplsummary } from './pplsummary.js';
-	import { gndrSummary } from './gndrSummary.js';
-	
+	import { createGenderChart } from "./populationChart.js";
+
+	export function gndrSummary(accessToken, adm_cd) {
+	    fetch(`https://sgisapi.kostat.go.kr/OpenAPI3/startupbiz/mfratiosummary.json?accessToken=${accessToken}&adm_cd=${adm_cd}`)
+	        .then(response => response.json())
+	        .then(data => {
+	            if (data.errCd === 0) {
+	                const result = data.result[0];
+	                if (result) {
+	                    const genderData = {
+	                        male: result.m_ppl,
+	                        female: result.f_ppl
+	                    };
+	                    createGenderChart(genderData);
+	                }
+	            }
+	        });
+	}
+
 	var accessToken = 'none';
 	var errCnt = 0;
 	
@@ -38,24 +55,12 @@
 	    }
 	}
 	
-	document.getElementById('send-coordinates').addEventListener('click', async function() {
-	    const longitude = document.getElementById('longitude').value; // 경도 값
-	    const latitude = document.getElementById('latitude').value; // 위도 값
-	
-	    // 값이 제대로 들어갔는지 확인
-	    console.log(`Received coordinates: longitude=${longitude}, latitude=${latitude}`);
-	
-	    try {
-	        if (accessToken === 'none') {
-	            console.warn('Access token is not available. Requesting a new token...');
-	            await getAccessToken(); // 토큰 발급 완료 후 진행
-	        }
-	        // 액세스 토큰이 유효하면 reverseGeo 호출
-	        reverseGeo(longitude, latitude);
-	    } catch (error) {
-	        console.error('Failed to get access token.', error);
-	    }
+	document.addEventListener("DOMContentLoaded", () => {
+	    console.log("DOM fully loaded and parsed.");
+	    // 추가적인 초기화 작업이 있다면 이곳에 작성
 	});
+
+
 	
 	export function reverseGeo(longitude, latitude) {
 	    const addr_type = 21;
