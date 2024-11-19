@@ -25,7 +25,6 @@ function groupByIndustry(businesses) {
 
     businesses.forEach(business => {
         const category = classifyKsic(business.ksicCd); // KSIC 코드를 그룹명으로 변환
-        console.log(`Business: ${business.bizesNm}, KSIC: ${business.ksicCd}, Category: ${category}`);
         
         if (category === '기업') {
             const mappedName = getMappedName(business.ksicCd);
@@ -80,9 +79,7 @@ function prepareChartData(groupedData) {
     return result;
 }
 function createChart(chartId, labels, data, title) {
-    console.log(`Creating chart for ${title}`);
-    console.log('Labels:', labels);
-    console.log('Data:', data);
+
 
     if (data.length === 0) {
         console.warn('No data to display on the chart:', title);
