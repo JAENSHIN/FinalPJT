@@ -23,12 +23,12 @@ export function gndrSummary(accessToken, adm_cd) {
             // 데이터 파싱
             const result = data.result[0];
             if (result) {
-				console.log('행정구역 이름:', result.adm_nm);
+				/*console.log('행정구역 이름:', result.adm_nm);
                 console.log('전체인구:', result.total_ppl	);
 				console.log('여자인구:', result.f_ppl);
 				console.log('남자인구:', result.m_ppl);
                 console.log('여자비율:', result.f_per);
-				console.log('남자비율:', result.m_per);
+				console.log('남자비율:', result.m_per);*/
 				
 				
             } else {
