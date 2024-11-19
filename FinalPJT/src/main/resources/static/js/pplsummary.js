@@ -22,7 +22,7 @@
 	        if (parseInt(data.errCd) === 0) {
 	            // 데이터 파싱
 	            const result = data.result[0];
-	            if (result) {
+	            if (result) {/*
 	                console.log('행정구역 이름:', result.adm_nm);
 	                console.log('10대 미만 인구비율:', result.teenage_less_than_per);
 	                console.log('10대 미만 인구수:', result.teenage_less_than_cnt);
@@ -39,7 +39,7 @@
 	                console.log('60대 인구비율:', result.sixty_per);
 	                console.log('60대 인구수:', result.sixty_cnt);
 	                console.log('70대 이상 인구비율:', result.seventy_more_than_per);
-	                console.log('70대 이상 인구수:', result.seventy_more_than_cnt);
+	                console.log('70대 이상 인구수:', result.seventy_more_than_cnt);*/
 	            } else {
 	                console.warn('No result found in response data.');
 	            }

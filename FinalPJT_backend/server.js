@@ -317,11 +317,6 @@ app.get('/api/getData', async (req, res) => {
 		const query = `SELECT * FROM biz_list ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`;
 		const [rows] = await connection.query(query);		
 		
-        // 데이터 조회 쿼리 실행
-		/*const [rows] = await connection.query(
-		    `SELECT * FROM biz_list ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`
-		);	
-*/
         await connection.end();
 
         // 결과 응답
@@ -339,15 +334,33 @@ app.get('/api/getData', async (req, res) => {
     }
 });
 
+// 환경 변수에서 키 값 가져오기
+const consumerKey = process.env.CONSUMER_KEY;
+const consumerSecret = process.env.CONSUMER_SECRET;
 
-
-
-
-// 모든 다른 요청에 대해 index.html 제공
-app.get('*', (req, res) => {
-    res.sendFile('C:\\Users\\gram\\git\\FinalPJT\\FinalPJT\\src\\main\\resources\\templates\\inform.html');
+// 새로운 액세스 토큰 발급 엔드포인트
+app.get('/api/getAccessToken', async (req, res) => {
+    const url = `https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?consumer_key=${consumerKey}&consumer_secret=${consumerSecret}`;
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.errCd === 0) {
+            res.json({ accessToken: data.result.accessToken });
+        } else {
+            res.status(400).json({ error: 'Failed to get access token', message: data.errMsg });
+        }
+    } catch (error) {
+        console.error('Error getting access token:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
+/*// 모든 다른 요청에 대해 index.html 제공
+app.get('*', (req, res) => {
+    res.sendFile('C:\\Users\\gram\\git\\FinalPJT\\FinalPJT\\src\\main\\resources\\templates\\inform.html');
+});*/
 
 // 서버 시작
 app.listen(PORT, () => {
