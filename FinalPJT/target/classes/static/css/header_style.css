@@ -6,6 +6,7 @@ header {
     justify-content: space-between;
     padding: 1vh 5vw; /* 뷰포트 너비에 따라 패딩 조절 */
     background-color: #fff;
+    height: 10vh;
 }
 
 header .logo {
