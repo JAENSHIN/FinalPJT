@@ -43,7 +43,7 @@
 	        if (data.errCd === 0) {
 	            accessToken = data.result.accessToken; // 전역 변수에 저장
 	            localStorage.setItem('sgisAccessToken', accessToken); // 로컬 스토리지에 저장
-	            console.log('Access token:', accessToken);
+	            //console.log('Access token:', accessToken);
 	
 	            // 액세스 토큰 발급 완료 이벤트 발생
 	            document.dispatchEvent(new CustomEvent('accessTokenReady', { detail: accessToken }));
@@ -56,7 +56,7 @@
 	}
 	
 	document.addEventListener("DOMContentLoaded", () => {
-	    console.log("DOM fully loaded and parsed.");
+	    //console.log("DOM fully loaded and parsed.");
 	    // 추가적인 초기화 작업이 있다면 이곳에 작성
 	});
 
@@ -75,7 +75,7 @@
 	        return response.json();
 	    })
 	    .then(data => {
-	        console.log('Full API response:', data); // 응답 데이터 전체를 출력하여 데이터 구조 확인
+	        //console.log('Full API response:', data); // 응답 데이터 전체를 출력하여 데이터 구조 확인
 	
 	        if (data.errCd === 0) {
 	            // result는 배열이므로 배열의 첫 번째 요소에 접근해야 합니다.
@@ -84,8 +84,8 @@
 	                const adminDistrictCode = firstResult.adm_dr_cd;
 	                const fullAddress = firstResult.full_addr;
 	
-	                console.log('Admin District Code:', adminDistrictCode);
-	                console.log('Full Address:', fullAddress);
+	               // console.log('Admin District Code:', adminDistrictCode);
+	                //console.log('Full Address:', fullAddress);
 	
 	                // pplsummary 함수 호출
 	                pplsummary(accessToken, adminDistrictCode);
