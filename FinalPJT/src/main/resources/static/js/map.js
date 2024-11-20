@@ -49,7 +49,6 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
     reverseGeo(latlng.getLng(), latlng.getLat());
 });
 
-
 // fetchAllData 함수 - 상권 정보를 가져오는 기존 함수
 function fetchAllData(latitude, longitude, radius) {
     const numOfRows = 10;
@@ -59,7 +58,7 @@ function fetchAllData(latitude, longitude, radius) {
     for (let i = 1; i <= totalPages; i++) {
         const url = `http://localhost:3000/api/storeListInRadius?latitude=${latitude}&longitude=${longitude}&radius=${radius}&pageNo=${i}`;
         promises.push(fetch(url).then(response => response.json()));
-    }
+    } 
 
     Promise.all(promises)
         .then(responses => {
@@ -71,7 +70,6 @@ function fetchAllData(latitude, longitude, radius) {
             console.error('오류 발생:', error);
         });
 }
-
 
 // InfoWindow 생성
 const infowindow = new kakao.maps.InfoWindow({
