@@ -1,13 +1,14 @@
 let populationChart = null; // 연령대별 인구 차트를 저장하는 변수
 let genderChart = null; // 성별 비율 차트를 저장하는 변수
 
+// 수정된 createPopulationChart
 export function createPopulationChart(data) {
-	if (populationChart) {
-	      populationChart.destroy();
-	  }
+    if (populationChart) {
+        populationChart.destroy(); // 기존 차트 제거
+    }
 
     const ageChartCtx = document.getElementById("populationchart").getContext("2d");
-    new Chart(ageChartCtx, {
+    populationChart = new Chart(ageChartCtx, { // 새로운 차트 생성
         type: "bar",
         data: {
             labels: Object.keys(data),
@@ -26,21 +27,17 @@ export function createPopulationChart(data) {
         }
     });
 }
+
+// 수정된 createGenderChart
 export function createGenderChart(data) {
-	// 기존 차트를 제거
-	   if (genderChart) {
-	       genderChart.destroy();
-	   }
-    // 데이터를 숫자로 변환
+    if (genderChart) {
+        genderChart.destroy(); // 기존 차트 제거
+    }
+
     const male = parseInt(data.male, 10);
     const female = parseInt(data.female, 10);
-
     const total = male + female;
 
-    // 총 인구를 콘솔에 출력
-    //console.log("총 인구:", total);
-
-    // 총 인구가 0이면 그래프를 그리지 않고 경고 메시지를 출력
     if (total === 0) {
         console.warn("총 인구가 0입니다. 데이터를 확인하세요.");
         return;
@@ -50,7 +47,7 @@ export function createGenderChart(data) {
     const femalePercentage = ((female / total) * 100).toFixed(1);
 
     const genderChartCtx = document.getElementById("genderChart").getContext("2d");
-    new Chart(genderChartCtx, {
+    genderChart = new Chart(genderChartCtx, { // 새로운 차트 생성
         type: "pie",
         data: {
             labels: [
@@ -66,28 +63,28 @@ export function createGenderChart(data) {
             }]
         },
         options: {
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: (context) => {
-                            const value = context.raw;
-                            const percentage = ((value / total) * 100).toFixed(1);
-                            return `${context.label}: ${value}명 (${percentage}%)`;
-                        }
-                    }
-                },
-                datalabels: {
-                    formatter: (value, context) => {
-                        const percentage = ((value / total) * 100).toFixed(1);
-                        return `${percentage}%`;
-                    },
-                    color: '#000',
-                    font: {
-                        weight: 'bold'
-                    }
-                }
-            }
-        },
-        plugins: [ChartDataLabels] // Chart.js 플러그인 추가
+			plugins: {
+			                tooltip: {
+			                    callbacks: {
+			                        label: (context) => {
+			                            const value = context.raw;
+			                            const percentage = ((value / total) * 100).toFixed(1);
+			                            return `${context.label}: ${value}명 (${percentage}%)`;
+			                        }
+			                    }
+			                },
+			                datalabels: {
+			                    formatter: (value, context) => {
+			                        const percentage = ((value / total) * 100).toFixed(1);
+			                        return `${percentage}%`;
+			                    },
+			                    color: '#000',
+			                    font: {
+			                        weight: 'bold'
+			                    }
+			                }
+			            }
+			        },
+			        plugins: [ChartDataLabels] // Chart.js 플러그인 추가
     });
 }
