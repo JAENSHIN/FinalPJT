@@ -52,13 +52,12 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
 
 // fetchAllData 함수 - 상권 정보를 가져오는 기존 함수
 function fetchAllData(latitude, longitude, radius) {
-    const serviceKey = "%2FleCaqoLYYVmeyAYkuNsvs1fQEtCoHSfMZcTebr%2BoeVEfbrdqhUUTM4oEUKfwpX3r%2BhpC%2BXFc7hsktUcHW1OAg%3D%3D"; // 서비스 키를 입력하세요
     const numOfRows = 10;
     const totalPages = 5;
     const promises = [];
 
     for (let i = 1; i <= totalPages; i++) {
-        const url = `https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInRadius?serviceKey=${serviceKey}&pageNo=${i}&numOfRows=${numOfRows}&radius=${radius}&cx=${longitude}&cy=${latitude}&type=json`;
+        const url = `http://localhost:3000/api/storeListInRadius?latitude=${latitude}&longitude=${longitude}&radius=${radius}&pageNo=${i}`;
         promises.push(fetch(url).then(response => response.json()));
     }
 
