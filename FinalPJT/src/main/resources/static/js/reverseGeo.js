@@ -25,26 +25,21 @@
 	getAccessToken();
 	
 	async function getAccessToken() {
-	    const consumerKey = '796b2cf0ce594c6c94aa';
-	    const consumerSecret = 'cc6d2a85a4304c6f88ba';
-	    const url = `https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?consumer_key=${consumerKey}&consumer_secret=${consumerSecret}`;
-	
 	    try {
-	        const response = await fetch(url, {
+	        const response = await fetch('http://localhost:3000/api/getAccessToken', {
 	            method: 'GET'
 	        });
-	
+
 	        if (!response.ok) {
 	            throw new Error(`HTTP error! status: ${response.status}`);
 	        }
-	
+
 	        const data = await response.json();
-	
+
 	        if (data.errCd === 0) {
-	            accessToken = data.result.accessToken; // 전역 변수에 저장
+	            accessToken = data.result.accessToken; // 전역 변수 업데이트
 	            localStorage.setItem('sgisAccessToken', accessToken); // 로컬 스토리지에 저장
-	            //console.log('Access token:', accessToken);
-	
+
 	            // 액세스 토큰 발급 완료 이벤트 발생
 	            document.dispatchEvent(new CustomEvent('accessTokenReady', { detail: accessToken }));
 	        } else {
@@ -54,12 +49,13 @@
 	        console.error('Error getting access token:', error);
 	    }
 	}
+
+
 	
 	document.addEventListener("DOMContentLoaded", () => {
 	    //console.log("DOM fully loaded and parsed.");
 	    // 추가적인 초기화 작업이 있다면 이곳에 작성
 	});
-
 
 	
 	export function reverseGeo(longitude, latitude) {
