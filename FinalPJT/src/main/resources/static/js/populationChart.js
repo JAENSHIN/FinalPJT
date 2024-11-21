@@ -1,15 +1,14 @@
 let populationChart = null; // 연령대별 인구 차트를 저장하는 변수
 let genderChart = null; // 성별 비율 차트를 저장하는 변수
 
-// 수정된 createPopulationChart
 export function createPopulationChart(data) {
     if (populationChart) {
-        populationChart.destroy(); // 기존 차트 제거
+        populationChart.destroy();
     }
 
     const ageChartCtx = document.getElementById("populationchart").getContext("2d");
-    populationChart = new Chart(ageChartCtx, { // 새로운 차트 생성
-        type: "bar",
+    populationChart = new Chart(ageChartCtx, {
+        type: "bar", // 기본 2D 타입
         data: {
             labels: Object.keys(data),
             datasets: [{
@@ -17,16 +16,25 @@ export function createPopulationChart(data) {
                 data: Object.values(data),
                 backgroundColor: "rgba(153, 102, 255, 0.2)",
                 borderColor: "rgba(153, 102, 255, 1)",
-                borderWidth: 1
+                borderWidth: 1,
+				barThickness: 25, // 막대의 두께를 고정하여 입체감을 줌
+				borderSkipped: false, // 막대의 윗부분을 둥글게 만들어 입체감 부여
+				                    borderRadius: 8 // 막대의 모서리를 둥글게 처리하여 입체감 추가
+
             }]
         },
         options: {
-            scales: {
-                y: { beginAtZero: true }
+            plugins: {
+                '3d': { // 3D 효과 설정
+                    enabled: true,
+                    depth: 20,
+                    perspective: 50
+                }
             }
         }
     });
 }
+
 
 // 수정된 createGenderChart
 export function createGenderChart(data) {
@@ -48,7 +56,7 @@ export function createGenderChart(data) {
 
     const genderChartCtx = document.getElementById("genderChart").getContext("2d");
     genderChart = new Chart(genderChartCtx, { // 새로운 차트 생성
-        type: "pie",
+        type: "doughnut",
         data: {
             labels: [
                 `남성 (${malePercentage}%)`,
@@ -59,7 +67,8 @@ export function createGenderChart(data) {
                 data: [male, female],
                 backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(255, 99, 132, 0.2)"],
                 borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)"],
-                borderWidth: 1
+                borderWidth: 1,
+
             }]
         },
         options: {

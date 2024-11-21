@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53058506472e68663c191f4ba75fc7b0&libraries=clusterer,services"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r146/three.min.js"></script>
     <script type="module" th:src="@{/js/api.js}"></script>
 	<script type="module" th:src="@{/js/map.js}"></script>
 	<script type="module" th:src="@{/js/addressSearch.js}"></script>
@@ -20,16 +21,15 @@
     <div th:replace="header :: header"></div>
 
     <div id="content">
-        <div id="sidebar">
+    <div id="sidebar">
         <div id="sidebar-buttons">
-            <button id="business-info-btn">상권정보</button>
-            <button id="population-info-btn">인구정보</button>
+            <button id="business-info-btn" onclick="('business')">상권정보</button>
+            <button id="population-info-btn" onclick="('population')">인구정보</button>
         </div>
         <!-- 사이드바 내용 섹션 -->
         <div id="business-info-section" class="sidebar-content">
             <h2>상권 분석</h2>
             <div>
-                <label for="address">주소 검색:</label>
                 <input type="text" id="address" placeholder="주소를 입력하세요">
                 <button id="searchButton">검색</button>
                 <ul id="searchResults" class="search-results"></ul>
@@ -45,21 +45,22 @@
         </div>
         <div id="population-info-section" class="sidebar-content" style="display: none;">
             <h2>인구 분석</h2>
-    		<div>
-        		<h3>연령대별 인구</h3>
-        		<canvas id="populationchart" width="400" height="400"></canvas>
-    		</div>
-    		<div>
-        		<h3>성별 인구 비율</h3>
-        		<canvas id="genderChart" width="400" height="200"></canvas>
-    		</div>        
-    	</div>
-           
+            <div>
+                <h3>연령대별 인구</h3>
+                <canvas id="populationchart" style="width: 100%; max-width: 600px; height: 400px;"></canvas>
+            </div>
+            <div style="margin-top: 20px;">
+                <h3>성별 인구 비율</h3>
+                <canvas id="genderChart" style="width: 100%; max-width: 500px; height: 300px;"></canvas>
+            </div>
         </div>
-        
-        <div id="business-list"></div> 
+    </div>
 
-        <div id="map" style="width:100%;height:auto;"></div>
-    </div>   
+    <div id="map" style="width:100%;height:auto;"></div>
+</div>   
+
+<script type="module" th:src="@{/js/sidebar-toggle.js}"></script>
+
+
 </body>
 </html>

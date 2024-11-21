@@ -100,7 +100,10 @@ function createChart(chartId, labels, data, title) {
 		               data: data,
 		               backgroundColor: 'rgba(75, 192, 192, 0.2)',
 		               borderColor: 'rgba(75, 192, 192, 1)',
-		               borderWidth: 1
+		               borderWidth: 1,
+					   barThickness: 25, // 막대의 두께를 고정하여 입체감을 줌
+					   borderSkipped: false, // 막대의 윗부분을 둥글게 만들어 입체감 부여
+				       borderRadius: 8 // 막대의 모서리를 둥글게 처리하여 입체감 추가
 		           }]
 		       },
 		       options: {
@@ -122,7 +125,10 @@ function createChart(chartId, labels, data, title) {
 		               data: data,
 		               backgroundColor: 'rgba(75, 192, 192, 0.2)',
 		               borderColor: 'rgba(75, 192, 192, 1)',
-		               borderWidth: 1
+		               borderWidth: 1,
+					   barThickness: 25, // 막대의 두께를 고정하여 입체감을 줌
+					   borderSkipped: false, // 막대의 윗부분을 둥글게 만들어 입체감 부여
+					   borderRadius: 8 // 막대의 모서리를 둥글게 처리하여 입체감 추가
 		           }]
 		       },
 		       options: {
