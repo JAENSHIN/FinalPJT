@@ -1,6 +1,5 @@
-
-import { groupBusinessesByKsicCd } from './mapping.js';
-import { updateSidebar } from './api.js';
+import { updateSidebar } from '../core/biz_api.js';
+import { reverseGeo } from '../features/reverseGeo.js';
 
 // 지도 생성
 let allBusinesses = []; // 모든 비즈니스 정보를 저장할 배열
@@ -32,7 +31,7 @@ const markerClusterer = new kakao.maps.MarkerClusterer({
     minLevel: 10 // 클러스터링 시작 레벨
 });
    
-import { reverseGeo } from './reverseGeo.js';
+
 
 // 클릭 이벤트 수정
 // 지도 클릭 이벤트
@@ -87,20 +86,21 @@ function displayInfoWindow(marker, businesses) {
         const end = start + itemsPerPage;
         const currentItems = businesses.slice(start, end);
 
-        const content = `
-            <div style="padding:5px; width:150px;">
-                <h4>업체 목록 (${page}/${totalPages})</h4>
-                ${currentItems.map(b => `<p>${b.bizesNm}</p>`).join('')}
-                ${currentItems.map(b => `<p>${b.ksicNm}</p>`).join('')}
-                ${currentItems.map(b => `<p>${b.lnoAdr}</p>`).join('')}
-                ${currentItems.map(b => `<p>${b.rdnmAdr}</p>`).join('')}
-                <div>
-                    ${page > 1 ? `<button id="prevBtn" style="margin-right: 5px;"> < </button>` : ''}
-                    ${page < totalPages ? `<button id="nextBtn" style="margin-left: 5px; margin-right: 5px;"> > </button>` : ''}
-                    <button id="closeBtn" style="margin-left: 5px;">닫기</button> <!-- 종료 버튼 추가 -->
-                </div>
-            </div>
-        `;
+		const content = `
+		    <div class="info-window">
+		        <h4 class="info-window-title">업체 목록 (${page}/${totalPages})</h4>
+		        ${currentItems.map(b => `<p class="info-window-item">${b.bizesNm}</p>`).join('')}
+		        ${currentItems.map(b => `<p class="info-window-item">${b.ksicNm}</p>`).join('')}
+		        ${currentItems.map(b => `<p class="info-window-item">${b.rdnmAdr}</p>`).join('')}
+		        <div class="info-window-buttons">
+		            <button class="info-window-btn close-btn" id="closeBtn">닫기</button>
+		            <div class="nav-buttons">
+		                ${page > 1 ? `<button class="info-window-btn" id="prevBtn">이전</button>` : ''}
+		                ${page < totalPages ? `<button class="info-window-btn" id="nextBtn">다음</button>` : ''}
+		            </div>
+		        </div>
+		    </div>
+		`;
 
         infowindow.setContent(content);
         infowindow.setPosition(marker.getPosition()); // 마커 위치에 정보창 표시

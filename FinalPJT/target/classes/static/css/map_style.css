@@ -27,7 +27,30 @@ body, html {
     position: relative;
     border-radius: 10px; /* 모서리 둥글게 */
 }
+.heading {
+    display: flex; /* 플렉스 컨테이너 설정 */
+    align-items: center; /* 텍스트와 이미지를 수직 가운데 정렬 */
+    margin-bottom: 10px; /* 제목과 아래 내용 간 간격 */
+}
 
+/* 아이콘 스타일 */
+.icon {
+    width: 20px; /* 아이콘 너비 */
+    height: 20px; /* 아이콘 높이 */
+    margin-right: 10px; /* 텍스트와 이미지 사이 간격 */
+}
+
+/* 제목 스타일 */
+.heading h2{
+    margin: 0; /* 기본 여백 제거 */
+    font-weight: bold; /* 굵은 글씨 */
+    font-size: 1.2rem; /* 제목 크기 */
+}
+.heading h3 {
+    margin: 10px; /* 기본 여백 제거 */
+    font-weight: bold; /* 굵은 글씨 */
+    font-size: 1rem; /* 제목 크기 */
+}
 .sidebar-content {
    position: relative;
     z-index: 2;
@@ -90,6 +113,16 @@ body, html {
 
 .chart {
     margin-top: 20px;
+}
+.error-message {
+    color: #ff6b6b; /* 경고 색상 */
+    font-size: 14px;
+    text-align: center;
+    padding: 20px;
+    background-color: #fff5f5; /* 연한 빨간 배경 */
+    border: 1px solid #ff6b6b;
+    border-radius: 8px;
+    margin-top: 10px;
 }
 
 /* 사이드바 버튼 스타일 */

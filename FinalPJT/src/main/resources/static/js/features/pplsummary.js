@@ -1,4 +1,4 @@
-import { createPopulationChart, createGenderChart } from './populationChart.js';
+import { createPopulationChart, createGenderChart } from '../ui/populationChart.js';
 	
 export function pplsummary(accessToken, adm_cd) {
 	    if (!adm_cd) {
