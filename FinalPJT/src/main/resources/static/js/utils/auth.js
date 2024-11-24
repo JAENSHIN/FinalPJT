@@ -1,5 +1,6 @@
 export var accessToken = 'none';
 export var errCnt = 0;
+
 export async function getAccessToken() {
     try {
         const response = await fetch('http://localhost:3000/api/getAccessToken', {
