@@ -1,0 +1,130 @@
+/* popup.css */
+#others-popup {
+    position: fixed;
+    top: 50%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(to bottom, #ffffff, #e0f7fa);
+    border: 2px solid #b0d8dd;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 1000;
+    width: auto;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    border-radius: 12px;
+    text-align: center;
+}
+
+#others-popup h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #000000;
+}
+
+#others-popup p {
+    margin: 8px 0;
+    font-size: 15px;
+    color: #555;
+    line-height: 1.5;
+}
+
+#others-popup button {
+    display: inline-block;
+    background-color: #91baca;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 14px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#others-popup button:hover {
+    background-color: #6b9ca3;
+    transform: translateY(-2px);
+}
+
+#others-popup button:active {
+    transform: translateY(0);
+}
+
+#others-popup-close {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #888;
+    cursor: pointer;
+}
+
+#others-popup-close:hover {
+    text-decoration: underline;
+}
+
+/* InfoWindow 스타일 */
+.info-window {
+    background: linear-gradient(to bottom, #ffffff, #e0f7fa);
+    border: 2px solid #b0d8dd;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    width: 200px;
+    font-family: Arial, sans-serif;
+    text-align: left;
+}
+
+.info-window-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 10px;
+}
+
+.info-window-item {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.info-window-buttons {
+    display: flex; /* 버튼을 정렬하기 위해 flexbox 사용 */
+    justify-content: space-between; /* 좌우 끝으로 버튼 배치 */
+    align-items: center; /* 세로 가운데 정렬 */
+    margin-top: 10px;
+}
+
+.info-window-btn {
+    background-color: #91baca;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    margin: 0; /* 버튼 간격 제거 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.info-window-btn:hover {
+    background-color: #6b9ca3;
+    transform: translateY(-2px);
+}
+
+.info-window-btn:active {
+    transform: translateY(0);
+}
+
+/* 닫기 버튼 스타일 추가 */
+.info-window-buttons .close-btn {
+    margin-left: 0; /* 왼쪽에 붙도록 여백 제거 */
+}
+
+/* 이전/다음 버튼 그룹 */
+.info-window-buttons .nav-buttons {
+    display: flex;
+    gap: 5px; /* 버튼 간 간격 추가 */
+}
