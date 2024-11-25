@@ -1,5 +1,6 @@
 import { updateSidebar } from '../core/biz_api.js';
 import { reverseGeo } from '../features/reverseGeo.js';
+import { getNearbyBusinessIdeas } from '../features/ai_recommand.js';
 
 // 지도 생성
 let allBusinesses = []; // 모든 비즈니스 정보를 저장할 배열
@@ -46,6 +47,8 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
     // 상권 데이터와 인구 데이터를 가져옵니다.
     fetchAllData(latlng.getLat(), latlng.getLng(), radius);
     reverseGeo(latlng.getLng(), latlng.getLat());
+	// AI 추천 기능 호출
+	getNearbyBusinessIdeas(latlng);
 });
 
 // fetchAllData 함수 - 상권 정보를 가져오는 기존 함수

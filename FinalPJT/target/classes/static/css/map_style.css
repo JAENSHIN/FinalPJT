@@ -137,10 +137,10 @@ body, html {
     z-index: 15;
 }
 
-#business-info-btn, #population-info-btn {
+#business-info-btn, #population-info-btn,#AI-recommand-btn {
     outline: none;
     width: auto;
-    padding: 10px 20px;
+    padding: 10px 10px;
     background-color: #ffffff;
     color: black;
     border: 0px solid #ddd;
@@ -153,12 +153,12 @@ body, html {
     
 }
 
-#business-info-btn:hover, #population-info-btn:hover {
+#business-info-btn:hover, #population-info-btn:hover,#AI-recommand-btn:hover {
     background-color: #8badf9;
     transform: translateY(-2px);
 }
 
-#business-info-btn.active, #population-info-btn.active {
+#business-info-btn.active, #population-info-btn.active,#AI-recommand-btn.active {
     background-color: #8badf9;
     transform: translateY(0);
 }
