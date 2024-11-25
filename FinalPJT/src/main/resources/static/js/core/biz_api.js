@@ -26,6 +26,8 @@ export function updateSidebar(data) {
     }
 }
 
+
+
 // 버튼과 섹션 DOM 요소 가져오기
 const businessInfoBtn = document.getElementById("business-info-btn");
 const populationInfoBtn = document.getElementById("population-info-btn");
