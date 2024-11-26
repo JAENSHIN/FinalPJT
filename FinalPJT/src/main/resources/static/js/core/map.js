@@ -38,6 +38,8 @@ const markerClusterer = new kakao.maps.MarkerClusterer({
 // 지도 클릭 이벤트
 kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
     var latlng = mouseEvent.latLng;
+	const latitude = latlng.getLat(); // 위도
+	const longitude = latlng.getLng(); // 경도
     const radius = 100; // 반경 값을 고정 (100m)
 
     // 클릭한 좌표에 반경 설정
@@ -47,7 +49,15 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
     // 상권 데이터와 인구 데이터를 가져옵니다.
     fetchAllData(latlng.getLat(), latlng.getLng(), radius);
 	reverseGeo(latlng.getLng(), latlng.getLat());
-
+	
+	fetch(`http://localhost:3000/api/recommendation?latitude=${latitude}&longitude=${longitude}`)
+	      .then(response => response.json())
+	      .then(data => {
+	          updateAIRecommendations(data.recommendation);
+	      })
+	      .catch(error => {
+	          console.error('추천 오류:', error);
+	      });
 
   
 });
@@ -71,6 +81,38 @@ function fetchAllData(latitude, longitude, radius) {
         .catch(error => {
             console.error('오류 발생:', error);
         });
+}
+//AI 추천 기
+function updateAIRecommendations(recommendation) {
+    const aiIdeaList = document.getElementById("aiIdeaList");
+    aiIdeaList.innerHTML = ''; // 기존 추천 목록 초기화
+
+    // 각 추천 항목을 줄바꿈 기준으로 나눕니다.
+    const recommendations = recommendation.split(/\d+\.\s+/).filter(rec => rec.trim() !== ''); // 숫자. 을 기준으로 나누어 추천 항목 분리
+
+    recommendations.forEach((rec, index) => {
+        const [item, reason] = rec.split('이유:').map(part => part.trim()); // 추천 아이템과 이유를 분리
+
+        const listItem = document.createElement('div'); // 추천 항목을 위한 div 생성
+        listItem.className = 'ai-recommendation-item';
+
+        // 추천 아이템 부분
+        const itemElement = document.createElement('strong');
+        itemElement.className = 'recommendation-item';
+        itemElement.textContent = `${index + 1}순위: ${item}`;
+
+        // 추천 이유 부분
+        const reasonElement = document.createElement('div');
+        reasonElement.className = 'recommendation-reason';
+        reasonElement.textContent = `${reason}`;
+
+        // listItem에 추가
+        listItem.appendChild(itemElement);
+        listItem.appendChild(document.createElement('br')); // 줄바꿈
+        listItem.appendChild(reasonElement);
+
+        aiIdeaList.appendChild(listItem);
+    });
 }
 
 // InfoWindow 생성
