@@ -10,7 +10,6 @@ let totalPages = 1; // 전체 페이지 수
 
 // 데이터를 가져와 화면에 표시하는 함수
 async function fetchData() {
-    const url = `http://localhost:3000/api/getData?page=${pageNo}&numOfRows=${numOfRows}`;
     const loadingDiv = document.querySelector('.loading');
     const contentDiv = document.querySelector('.program-list');
     const pageInfo = document.querySelector('.page-info');
@@ -18,53 +17,58 @@ async function fetchData() {
     contentDiv.innerHTML = ''; // 이전 데이터를 지움
 
     try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            console.error('응답 상태 코드:', response.status);
-            throw new Error('네트워크 응답이 올바르지 않습니다.');
+        let allItems = [];
+        let page = 1;
+
+        // 전체 페이지 데이터 가져오기
+        while (true) {
+            const response = await fetch(`http://localhost:3000/api/getData?page=${page}&numOfRows=100`);
+            if (!response.ok) {
+                console.error('응답 상태 코드:', response.status);
+                throw new Error('네트워크 응답이 올바르지 않습니다.');
+            }
+
+            const data = await response.json();
+            allItems = allItems.concat(data.items);
+
+            // 마지막 페이지에 도달한 경우 중단
+            if (page >= data.totalPages) {
+                break;
+            }
+
+            page++;
         }
 
-        const data = await response.json();
-        totalPages = data.totalPages;
-
-        // 사용자 입력 날짜 및 검색어 가져오기
-        const startDateInput = document.querySelector('#start-date');
-        const endDateInput = document.querySelector('#end-date');
-        const keywordInput = document.querySelector('.search-bar input[type="text"]');
-
-        const startDate = startDateInput && startDateInput.value ? new Date(startDateInput.value) : null;
-        const endDate = endDateInput && endDateInput.value ? new Date(endDateInput.value) : null;
+        // 사용자 입력 검색어 가져오기
+        const keywordInput = document.querySelector('#search-keyword');
         const keyword = keywordInput && keywordInput.value ? keywordInput.value.toLowerCase() : "";
 
-        // DocumentFragment 사용
+        // 검색어에 따라 필터링된 데이터
+        let filteredItems = allItems;
+        if (keyword) {
+            filteredItems = allItems.filter(item => item.title && item.title.toLowerCase().includes(keyword));
+        }
+
+        // 페이징 처리를 위해 현재 페이지 계산
+        const startIdx = (pageNo - 1) * numOfRows;
+        const endIdx = startIdx + numOfRows;
+        const pagedItems = filteredItems.slice(startIdx, endIdx);
+        totalPages = Math.ceil(filteredItems.length / numOfRows);
+
+        // DocumentFragment 사용하여 필터링된 데이터 표시
         const fragment = document.createDocumentFragment();
-
-        data.items.forEach(item => {
-            const itemStartDate = new Date(item.applicationStartDate);
-            const itemEndDate = new Date(item.applicationEndDate);
-            const itemTitle = item.title ? item.title.toLowerCase() : "";
-
-            // 필터링 조건 적용: 만약 startDate, endDate, keyword 모두 없으면 전체 출력
-            if (
-                (!startDate && !endDate && !keyword) ||
-                (
-                    (!startDate || itemEndDate >= startDate) &&
-                    (!endDate || itemStartDate <= endDate) &&
-                    (!keyword || itemTitle.includes(keyword))
-                )
-            ) {
-                const li = document.createElement('li');
-                li.classList.add('program-item');
-                li.innerHTML = `
-                    <a href="${item.viewUrl}" target="_blank">
-                        <span class="tag">중소벤처기업부</span>
-                        <h3>${item.title || "제목 없음"}</h3>
-                        <p>${item.writerPosition || "정보 없음"} | 
-                        ${formatDate(item.applicationStartDate)} ~ ${formatDate(item.applicationEndDate)}</p>
-                    </a>
-                `;
-                fragment.appendChild(li);
-            }
+        pagedItems.forEach(item => {
+            const li = document.createElement('li');
+            li.classList.add('program-item');
+            li.innerHTML = `
+                <a href="${item.viewUrl}" target="_blank">
+                    <span class="tag">중소벤처기업부</span>
+                    <h3>${item.title || "제목 없음"}</h3>
+                    <p>${item.writerPosition || "정보 없음"} | 
+                    ${formatDate(item.applicationStartDate)} ~ ${formatDate(item.applicationEndDate)}</p>
+                </a>
+            `;
+            fragment.appendChild(li);
         });
 
         contentDiv.appendChild(fragment);
