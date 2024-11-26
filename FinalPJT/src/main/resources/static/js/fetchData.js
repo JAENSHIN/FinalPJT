@@ -1,5 +1,10 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // 초기 데이터 로드
+    fetchData();
+});
+
 // API 기본 정보
-const numOfRows = 5; // 한 페이지에 보여줄 데이터 개수
+const numOfRows = 8; // 한 페이지에 보여줄 데이터 개수
 let pageNo = 1; // 현재 페이지 번호
 let totalPages = 1; // 전체 페이지 수
 
@@ -14,29 +19,52 @@ async function fetchData() {
 
     try {
         const response = await fetch(url);
-		if (!response.ok) {
-		    console.error('응답 상태 코드:', response.status);
-		    throw new Error('네트워크 응답이 올바르지 않습니다.');
-		}
+        if (!response.ok) {
+            console.error('응답 상태 코드:', response.status);
+            throw new Error('네트워크 응답이 올바르지 않습니다.');
+        }
 
         const data = await response.json();
-
         totalPages = data.totalPages;
+
+        // 사용자 입력 날짜 및 검색어 가져오기
+        const startDateInput = document.querySelector('#start-date');
+        const endDateInput = document.querySelector('#end-date');
+        const keywordInput = document.querySelector('.search-bar input[type="text"]');
+
+        const startDate = startDateInput && startDateInput.value ? new Date(startDateInput.value) : null;
+        const endDate = endDateInput && endDateInput.value ? new Date(endDateInput.value) : null;
+        const keyword = keywordInput && keywordInput.value ? keywordInput.value.toLowerCase() : "";
 
         // DocumentFragment 사용
         const fragment = document.createDocumentFragment();
+
         data.items.forEach(item => {
-            const li = document.createElement('li');
-            li.classList.add('program-item');
-            li.innerHTML = `
-                <a href="${item.viewUrl}" target="_blank">
-                    <span class="tag">중소벤처기업부</span>
-                    <h3>${item.title || "제목 없음"}</h3>
-                    <p>${item.writerPosition || "정보 없음"} | 
-                    ${formatDate(item.applicationStartDate)} ~ ${formatDate(item.applicationEndDate)}</p>
-                </a>
-            `;
-            fragment.appendChild(li);
+            const itemStartDate = new Date(item.applicationStartDate);
+            const itemEndDate = new Date(item.applicationEndDate);
+            const itemTitle = item.title ? item.title.toLowerCase() : "";
+
+            // 필터링 조건 적용: 만약 startDate, endDate, keyword 모두 없으면 전체 출력
+            if (
+                (!startDate && !endDate && !keyword) ||
+                (
+                    (!startDate || itemEndDate >= startDate) &&
+                    (!endDate || itemStartDate <= endDate) &&
+                    (!keyword || itemTitle.includes(keyword))
+                )
+            ) {
+                const li = document.createElement('li');
+                li.classList.add('program-item');
+                li.innerHTML = `
+                    <a href="${item.viewUrl}" target="_blank">
+                        <span class="tag">중소벤처기업부</span>
+                        <h3>${item.title || "제목 없음"}</h3>
+                        <p>${item.writerPosition || "정보 없음"} | 
+                        ${formatDate(item.applicationStartDate)} ~ ${formatDate(item.applicationEndDate)}</p>
+                    </a>
+                `;
+                fragment.appendChild(li);
+            }
         });
 
         contentDiv.appendChild(fragment);
@@ -54,6 +82,17 @@ async function fetchData() {
     updatePageButtons();
 }
 
+// 날짜 필터링을 위해 호출되는 함수
+function filterByDate() {
+    pageNo = 1; // 페이지를 처음으로 리셋
+    fetchData();
+}
+
+// 키워드 필터링을 위해 호출되는 함수
+function filterByKeyword() {
+    pageNo = 1; // 페이지를 처음으로 리셋
+    fetchData();
+}
 
 // 페이지 넘김 함수 및 버튼 상태 업데이트
 function nextPage() {
@@ -95,6 +134,3 @@ function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toISOString().split('T')[0]; // 'T'를 기준으로 나누고 첫 번째 부분 반환
 }
-
-// 초기 데이터 로드
-fetchData();

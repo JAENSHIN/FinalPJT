@@ -13,41 +13,32 @@
 
     <div class="main-content">
         <div class="sidebar" id="sidebar">
-            <h2>조건별 검색</h2>
-            <div class="search-bar">
-                <input type="text" placeholder="검색">
-                <button>검색</button>
-                <button class="toggle-select-btn">
-                    <i class="fas fa-chevron-down toggle-icon"></i> <!-- 아이콘만 표시 -->
-                </button>
-                <div class="select-options" style="display: none;">
-                    <select>
-                        <option>지원분야</option>
-                    </select>
-                    <select>
-                        <option>지역</option>
-                    </select>
-                    <select>
-                        <option>대상</option>
-                    </select>
-                    <select>
-                        <option>연령</option>
-                    </select>
-                    <select>
-                        <option>창업 이력</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+		   	 <h2>조건별 검색</h2>
+		    	<div class="search-bar">
+		        <input type="text" id="search-keyword" placeholder="검색">
+				<button onclick="filterByKeyword()">검색</button>		        
+				<button class="toggle-select-btn">
+		            <i class="fas fa-chevron-down toggle-icon"></i> <!-- 아이콘만 표시 -->
+		        </button>
+		        <div class="select-options" style="display: none;">
+		            <label for="start-date">시작 날짜:</label>
+		            <input type="date" id="start-date">
+		            <label for="end-date">종료 날짜:</label>
+		            <input type="date" id="end-date">
+		            <button onclick="filterByDate()">날짜로 검색</button>
+		        </div>
+		    </div>
+		</div>
+
         <div class="content">
             <div class="loading">로딩 중...</div>
             <ul class="program-list"></ul>
             <!-- 페이지 넘김 버튼 추가 -->
-            <div class="pagination">
-                <button class="prev-button" onclick="prevPage()">이전</button>
-                <span class="page-info"></span>
-                <button class="next-button" onclick="nextPage()">다음</button>
-            </div>
+            <div class="pagination center-pagination">
+    			<button class="prev-button" onclick="prevPage()">이전</button>
+    			<span class="page-info"></span>
+    			<button class="next-button" onclick="nextPage()">다음</button>
+			</div>
         </div>
     </div>
 
