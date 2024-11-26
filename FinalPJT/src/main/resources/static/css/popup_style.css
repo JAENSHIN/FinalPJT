@@ -1,20 +1,22 @@
-/* popup.css */
 #others-popup {
     position: fixed;
     top: 50%;
     left: 40%;
     transform: translate(-50%, -50%);
-    background: linear-gradient(to bottom, #ffffff, #e0f7fa);
+    background:#ffffff;
     border: 2px solid #b0d8dd;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     padding: 20px;
     z-index: 1000;
-    width: auto;
+    width: 200px; /* 팝업의 고정 너비 설정 */
+    max-height: 30vh; /* 팝업의 최대 높이 설정 */
+    overflow-y: auto; /* 내용이 많을 경우 스크롤 추가 */
     font-family: 'Arial', sans-serif;
     color: #333;
     border-radius: 12px;
     text-align: center;
 }
+
 
 #others-popup h3 {
     margin: 0 0 10px;
@@ -42,6 +44,7 @@
     font-size: 14px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease, transform 0.2s ease;
+    
 }
 
 #others-popup button:hover {
@@ -54,7 +57,9 @@
 }
 
 #others-popup-close {
-    margin-top: 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
     font-size: 13px;
     color: #888;
     cursor: pointer;
@@ -66,7 +71,7 @@
 
 /* InfoWindow 스타일 */
 .info-window {
-    background: linear-gradient(to bottom, #ffffff, #e0f7fa);
+    background: #ffffff;
     border: 2px solid #b0d8dd;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     padding: 15px;

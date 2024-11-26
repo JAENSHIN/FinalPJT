@@ -10,7 +10,7 @@ header {
 }
 
 header .logo {
-    width: 10vw; /* 뷰포트 너비 기준으로 로고 크기 조정 */
+    width: 100px; /* 뷰포트 너비 기준으로 로고 크기 조정 */
     height: auto;
     padding: 0vh;
 }
@@ -38,22 +38,19 @@ header nav ul li a {
         padding: 5px;
         justify-content: space-between;
     }
-
-    header .logo {
-        width: 100px; /* 작은 화면에서 로고 크기 조정 */
-    }
-
+ 
+    
     header nav {
         display: flex; /* nav 내부의 요소를 flex 컨테이너로 설정 */
-        justify-content: center; /* 메뉴를 중앙 정렬 */
+        justify-content: end; /* 메뉴를 중앙 정렬 */
         width: 100%; /* nav가 뷰포트 너비에 맞게 설정 */
     }
 
     header nav ul {
+        padding: 0; /* 기본 패딩 제거 */
         display: flex;
-        gap: 20px; /* 메뉴 간의 간격을 작게 조정 */
+        gap: 10px; /* 메뉴 간의 간격을 작게 조정 */
     }
-
     header nav ul li a {
         text-decoration: none;
         color: #333;
