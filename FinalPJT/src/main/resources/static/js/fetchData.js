@@ -9,6 +9,7 @@ let pageNo = 1; // 현재 페이지 번호
 let totalPages = 1; // 전체 페이지 수
 
 // 데이터를 가져와 화면에 표시하는 함수
+// 데이터를 가져와 화면에 표시하는 함수
 async function fetchData() {
     const loadingDiv = document.querySelector('.loading');
     const contentDiv = document.querySelector('.program-list');
@@ -39,14 +40,41 @@ async function fetchData() {
             page++;
         }
 
-        // 사용자 입력 검색어 가져오기
+        // 사용자 입력 검색어와 날짜 가져오기
         const keywordInput = document.querySelector('#search-keyword');
-        const keyword = keywordInput && keywordInput.value ? keywordInput.value.toLowerCase() : "";
+        const startDateInput = document.querySelector('#start-date');
+        const endDateInput = document.querySelector('#end-date');
 
-        // 검색어에 따라 필터링된 데이터
+        const keyword = keywordInput && keywordInput.value ? keywordInput.value.toLowerCase() : "";
+        const startDate = startDateInput && startDateInput.value ? new Date(startDateInput.value) : null;
+        const endDate = endDateInput && endDateInput.value ? new Date(endDateInput.value) : null;
+
+        // 키워드와 날짜에 따라 필터링된 데이터
         let filteredItems = allItems;
+
+        // 키워드 필터링
         if (keyword) {
-            filteredItems = allItems.filter(item => item.title && item.title.toLowerCase().includes(keyword));
+            filteredItems = filteredItems.filter(item => item.title && item.title.toLowerCase().includes(keyword));
+        }
+
+        // 날짜 필터링
+        if (startDate || endDate) {
+            filteredItems = filteredItems.filter(item => {
+                const itemStartDate = item.applicationStartDate ? new Date(item.applicationStartDate) : null;
+                const itemEndDate = item.applicationEndDate ? new Date(item.applicationEndDate) : null;
+
+                let isInRange = true;
+
+                // 시작 날짜와 종료 날짜 범위에 포함되는지 확인
+                if (startDate && itemEndDate) {
+                    isInRange = isInRange && (itemEndDate >= startDate);
+                }
+                if (endDate && itemStartDate) {
+                    isInRange = isInRange && (itemStartDate <= endDate);
+                }
+
+                return isInRange;
+            });
         }
 
         // 페이징 처리를 위해 현재 페이지 계산
@@ -57,15 +85,34 @@ async function fetchData() {
 
         // DocumentFragment 사용하여 필터링된 데이터 표시
         const fragment = document.createDocumentFragment();
+
         pagedItems.forEach(item => {
             const li = document.createElement('li');
             li.classList.add('program-item');
+
+            // 시작 날짜와 종료 날짜 처리 - 하루 추가
+            let startDate = item.applicationStartDate ? new Date(item.applicationStartDate) : null;
+            let endDate = item.applicationEndDate ? new Date(item.applicationEndDate) : null;
+
+            // 하루 추가하기
+            if (startDate) {
+                startDate.setDate(startDate.getDate() + 1);
+            }
+            if (endDate) {
+                endDate.setDate(endDate.getDate() + 1);
+            }
+
+            // 날짜를 포맷팅하여 문자열로 변환
+            const formattedStartDate = startDate ? formatDate(startDate) : "";
+            const formattedEndDate = endDate ? formatDate(endDate) : "";
+
+            // li 요소 생성
             li.innerHTML = `
                 <a href="${item.viewUrl}" target="_blank">
                     <span class="tag">중소벤처기업부</span>
                     <h3>${item.title || "제목 없음"}</h3>
                     <p>${item.writerPosition || "정보 없음"} | 
-                    ${formatDate(item.applicationStartDate)} ~ ${formatDate(item.applicationEndDate)}</p>
+                    ${formattedStartDate} ~ ${formattedEndDate}</p>
                 </a>
             `;
             fragment.appendChild(li);
@@ -85,6 +132,7 @@ async function fetchData() {
     // 페이지 버튼 상태 업데이트
     updatePageButtons();
 }
+
 
 // 날짜 필터링을 위해 호출되는 함수
 function filterByDate() {
