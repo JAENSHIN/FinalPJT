@@ -58,24 +58,24 @@ async function fetchData() {
         }
 
         // 날짜 필터링
-        if (startDate || endDate) {
-            filteredItems = filteredItems.filter(item => {
-                const itemStartDate = item.applicationStartDate ? new Date(item.applicationStartDate) : null;
-                const itemEndDate = item.applicationEndDate ? new Date(item.applicationEndDate) : null;
+		if (startDate || endDate) {
+		    filteredItems = filteredItems.filter(item => {
+		        const itemStartDate = item.applicationStartDate ? new Date(item.applicationStartDate) : null;
+		        const itemEndDate = item.applicationEndDate ? new Date(item.applicationEndDate) : null;
 
-                let isInRange = true;
+		        // 특정 기간 동안 지속되는 데이터인지 확인
+		        let isOverlapping = true;
 
-                // 시작 날짜와 종료 날짜 범위에 포함되는지 확인
-                if (startDate && itemEndDate) {
-                    isInRange = isInRange && (itemEndDate >= startDate);
-                }
-                if (endDate && itemStartDate) {
-                    isInRange = isInRange && (itemStartDate <= endDate);
-                }
+		        if (startDate && itemEndDate) {
+		            isOverlapping = isOverlapping && (itemEndDate >= startDate);
+		        }
+		        if (endDate && itemStartDate) {
+		            isOverlapping = isOverlapping && (itemStartDate <= endDate);
+		        }
 
-                return isInRange;
-            });
-        }
+		        return isOverlapping;
+		    });
+		}
 
         // 페이징 처리를 위해 현재 페이지 계산
         const startIdx = (pageNo - 1) * numOfRows;
