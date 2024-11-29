@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+###충돌방지 ###
+.gitignore

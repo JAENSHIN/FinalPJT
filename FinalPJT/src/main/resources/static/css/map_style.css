@@ -1,9 +1,9 @@
-/* 기본 스타일 */
 body, html {
     margin: 0;
     padding: 0;
-    height: 100%;
+    height: 100vh;
     display: flex;
+    overflow: hidden; /* 전체 스크롤 방지 */
     flex-direction: column;
     font-size: 1rem;
 }
@@ -12,44 +12,93 @@ body, html {
     flex: 1;
     display: flex;
     flex-direction: row; /* 기본 데스크탑 레이아웃 */
+    height: 90vh; /* 화면 전체를 채우도록 설정 */
+    
 }
 
 #sidebar {
-    width: 300px; /* 기본 사이드바 너비 */
-    background-color: #f5f5f5;
+    width: 300px;
+    background: linear-gradient(to bottom, #f5f5f5, #e0f7fa); /* 그라데이션 배경 추가 */
     padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 10px 0 15px rgba(0, 0, 0, 0.2);
     overflow-y: auto;
-    font-size: 0.8rem;
-    transition: display 0.3s ease;
+    max-height: 100%;
+    z-index: 10; /* 사이드바가 지도 위에 있도록 설정 */
+    position: relative;
+    border-radius: 10px; /* 모서리 둥글게 */
+}
+.heading {
+    display: flex; /* 플렉스 컨테이너 설정 */
+    align-items: center; /* 텍스트와 이미지를 수직 가운데 정렬 */
+    margin-bottom: 10px; /* 제목과 아래 내용 간 간격 */
 }
 
+/* 아이콘 스타일 */
+.icon {
+    width: 20px; /* 아이콘 너비 */
+    height: 20px; /* 아이콘 높이 */
+    margin-right: 10px; /* 텍스트와 이미지 사이 간격 */
+}
+
+/* 제목 스타일 */
+.heading h2{
+    margin: 0; /* 기본 여백 제거 */
+    font-weight: bold; /* 굵은 글씨 */
+    font-size: 1.2rem; /* 제목 크기 */
+}
+.heading h3 {
+    margin: 10px; /* 기본 여백 제거 */
+    font-weight: bold; /* 굵은 글씨 */
+    font-size: 1rem; /* 제목 크기 */
+}
+.sidebar-content {
+   position: relative;
+    z-index: 2;
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 0 10px 10px 10px;
+    margin-top: 0px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 #map {
     flex: 1;
     height: 100%;
+    position: relative;
+    z-index: 1; /* 지도가 사이드바 아래에 있도록 설정 */
 }
+
+/* 검색 결과 스크롤 */
+#searchResults {
+    list-style: none;
+    padding: 0;
+    margin: 0px 0;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: #f0f8ff; /* 검색 결과 배경 색상 */
+    font-size: 0.7rem; /* 글씨 크기 설정 */
+    border: 2px solid #b0d8dd; /* 테두리 설정 */
+    border-radius: 5px; /* 테두리 둥글게 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 테두리 그림자 추가 */
+}
+
 #address {
     width: calc(100% - 80px);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     padding: 5px;
+    border: 2px solid #b0d8dd;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #searchButton {
     width: 60px;
     padding: 7px;
-    background-color: #007bff;
+    background-color: #91baca;
     color: white;
     border: none;
-    border-radius: 2px;
+    border-radius: 5px;
     cursor: pointer;
-}
-/* 검색 결과 스타일 */
-#searchResults {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0;
-    max-height: 150px;
-    overflow-y: auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .search-result-item {
@@ -59,32 +108,114 @@ body, html {
 }
 
 .search-result-item:hover {
-    background-color: #f0f0f0;
+    background-color: #ececb3;
 }
 
 .chart {
     margin-top: 20px;
 }
+.error-message {
+    color: #ff6b6b; /* 경고 색상 */
+    font-size: 14px;
+    text-align: center;
+    padding: 20px;
+    background-color: #fff5f5; /* 연한 빨간 배경 */
+    border: 1px solid #ff6b6b;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/* 사이드바 버튼 스타일 */
+#sidebar-buttons {
+    position: static;
+    top: 0;
+    width: 100%;
+    display: table-row-group;
+    justify-content: flex-start;
+    padding: inherit;
+    background-color: transparent;
+    z-index: 15;
+}
+
+#business-info-btn, #population-info-btn,#AI-recommand-btn {
+    outline: none;
+    width: auto;
+    padding: 10px 10px;
+    background-color: #ffffff;
+    color: black;
+    border: 0px solid #ddd;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 6px 5px rgba(0, 0, 0, 0.1);
+    
+}
+
+#business-info-btn:hover, #population-info-btn:hover,#AI-recommand-btn:hover {
+    background-color: #8badf9;
+    transform: translateY(-2px);
+}
+
+#business-info-btn.active, #population-info-btn.active,#AI-recommand-btn.active {
+    background-color: #8badf9;
+    transform: translateY(0);
+}
+/* AI 추천 리스트의 스타일 */
+#aiIdeaList {
+    list-style-type: none;  /* 리스트 아이템 앞의 기본 점 제거 */
+    padding: 0;             /* 리스트 전체의 패딩 제거 */
+    margin: 0;              /* 불필요한 마진 제거 */
+}
+
+/* AI 추천 항목의 스타일 */
+#aiIdeaList .ai-recommendation-item {
+    margin-bottom: 20px; /* 각 항목 사이 간격 */
+}
+
+/* 추천 아이템의 스타일 */
+#aiIdeaList .recommendation-item {
+    font-size: 18px; /* 추천 아이템의 글자 크기 */
+    color: #184232; /* 추천 아이템의 글자 색상 */
+    font-weight: bold; /* 굵게 표시 */
+}
+
+/* 추천 이유의 스타일 */
+#aiIdeaList .recommendation-reason {
+    font-size: 15px; /* 추천 이유의 글자 크기 */
+    color: #555; /* 추천 이유의 글자 색상 */
+    margin-top: 10px; /* 추천 이유와 다음 요소 사이 간격 추가 */
+    font-style: normal; /* 기울임꼴로 표시 */
+}
+
+/* 모바일 레이아웃 */
 /* 모바일 레이아웃 */
 @media (max-width: 768px) {
     #content {
         position: relative;
+        flex-direction: column; /* 모바일 레이아웃에서 세로로 정렬 */
+    }
+	header .logo {
+        width: 70px; /* 작은 화면에서 로고 크기 조정 */
     }
 
     #sidebar {
-        position: fixed; /* 사이드바를 고정 */
+       position: fixed;
         bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 30vh; /* 사이드바의 기본 높이 */
+        padding: 10px;
+        width: 95%;
+        height: 40vh;
         background-color: #f5f5f5;
         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-        transform: translateY(100%); /* 기본적으로 숨긴 상태 */
+        transform: translateY(0);
         transition: transform 0.3s ease-in-out;
+        overflow-y: auto;
     }
 
     #map {
         height: 70vh; /* 지도가 나머지 화면을 채움 */
+        width: 100%; /* 지도의 너비가 전체 화면에 맞도록 설정 */
     }
 
     #sidebar-handle {
@@ -97,5 +228,30 @@ body, html {
         background-color: #ccc;
         border-radius: 5px;
         cursor: pointer;
+    }
+
+    #sidebar-buttons {
+        display: flex;
+        justify-content: left;
+        padding: 0;
+    }
+
+    #business-info-btn, #population-info-btn, #AI-recommand-btn {
+        width: auto;
+        padding: 10px;
+        background-color: #ffffff;
+        color: black;
+		border-radius: 10px 10px 0 0;        
+		cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+        
+    }
+
+    #business-info-btn.active, #population-info-btn.active, #AI-recommand-btn.active {
+        background-color: #8badf9;
+        transform: translateY(0);
     }
 }

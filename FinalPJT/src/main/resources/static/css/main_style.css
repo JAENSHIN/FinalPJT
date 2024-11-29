@@ -84,8 +84,9 @@ footer {
         font-size: 1rem;
         overflow-x: hidden; /* 좌우 스크롤 방지 */
     }
-
-    
+	header .logo {
+        width: 70px; /* 작은 화면에서 로고 크기 조정 */
+    }
 
     .banner {
         display: none;
