@@ -1,0 +1,8 @@
+[build]
+  base = ""
+  publish = "target/classes/static"
+  command = "bash install_maven.sh && mvn clean package"
+
+[build.environment]
+  JAVA_HOME = "/opt/buildhome/java"
+  PATH = "/opt/buildhome/maven/bin:/opt/buildhome/java/bin:$PATH"
