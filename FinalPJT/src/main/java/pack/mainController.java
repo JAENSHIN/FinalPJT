@@ -7,10 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class mainController {
 
     // 메인 페이지 매핑
-    @GetMapping("/main")
-    public String main() {
-        return "main"; // templates/main.html 반환
-    }
+	// 루트 경로 요청 처리 추가
+	@GetMapping("/")
+	public String home() {
+	    return "redirect:/main"; // /main으로 리디렉션
+	}
+
+	// 기존 매핑 유지
+	@GetMapping("/main")
+	public String main() {
+	    return "main"; // templates/main.html 반환
+	}
+
 
     // 지도 페이지 매핑
     @GetMapping("/map")

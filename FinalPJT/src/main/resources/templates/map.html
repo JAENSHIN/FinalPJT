@@ -10,8 +10,8 @@
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53058506472e68663c191f4ba75fc7b0&libraries=clusterer,services"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-	<script type="module" th:src="@{/js/core/map.js}"></script>
-	<script type="module" th:src="@{/js/features/addressSearch.js}"></script>
+	<script type="module" th:src="@{/js/core/map.js}" defer></script>
+	<script type="module" th:src="@{/js/features/addressSearch.js}" defer></script>
 </head>
 <body>
     <div th:replace="header :: header"></div>
@@ -70,6 +70,8 @@
     		<div class="heading">
         	<img src="./images/check3.png" alt="아이콘" class="icon">
         	<h2>AI 추천 서비스</h2>
+        	<img src="./images/Q.png" alt="아이콘" class="inform">
+        	<div class="gpt-text">gpt-3</div>
     		</div>
     		<ul id="aiIdeaList"></ul> <!-- AI 추천된 아이템을 표시할 리스트 -->
 		</div>

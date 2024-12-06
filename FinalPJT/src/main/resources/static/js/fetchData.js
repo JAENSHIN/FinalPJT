@@ -23,7 +23,7 @@ async function fetchData() {
 
         // 전체 페이지 데이터 가져오기
         while (true) {
-            const response = await fetch(`http://localhost:3000/api/getData?page=${page}&numOfRows=100`);
+            const response = await fetch(`http://14.63.176.243:3000/api/getData?page=${page}&numOfRows=100`);
             if (!response.ok) {
                 console.error('응답 상태 코드:', response.status);
                 throw new Error('네트워크 응답이 올바르지 않습니다.');
