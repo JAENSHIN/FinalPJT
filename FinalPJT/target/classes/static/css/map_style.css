@@ -39,7 +39,16 @@ body, html {
     height: 20px; /* 아이콘 높이 */
     margin-right: 10px; /* 텍스트와 이미지 사이 간격 */
 }
-
+.inform {
+    width: 15px; /* 아이콘 너비 */
+    height: 15px; /* 아이콘 높이 */
+    margin-right:10px;
+    margin-left: auto; /* 왼쪽 여백을 최대한 늘려 오른쪽으로 이동 */
+}
+.gpt-text {
+    font-size: 0.8rem; /* 원하는 글씨 크기 */
+    color: #6e7f71;    /* 원하는 색상 */
+}
 /* 제목 스타일 */
 .heading h2{
     margin: 0; /* 기본 여백 제거 */

@@ -50,7 +50,7 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
     fetchAllData(latlng.getLat(), latlng.getLng(), radius);
 	reverseGeo(latlng.getLng(), latlng.getLat());
 	
-	fetch(`http://localhost:3000/api/recommendation?latitude=${latitude}&longitude=${longitude}`)
+	fetch(`http://14.63.176.243:3000/api/recommendation?latitude=${latitude}&longitude=${longitude}`)
 	      .then(response => response.json())
 	      .then(data => {
 	          updateAIRecommendations(data.recommendation);
@@ -68,7 +68,7 @@ function fetchAllData(latitude, longitude, radius) {
     const promises = [];
 
     for (let i = 1; i <= totalPages; i++) {
-        const url = `http://localhost:3000/api/storeListInRadius?latitude=${latitude}&longitude=${longitude}&radius=${radius}&pageNo=${i}`;
+        const url = `http://14.63.176.243:3000/api/storeListInRadius?latitude=${latitude}&longitude=${longitude}&radius=${radius}&pageNo=${i}`;
         promises.push(fetch(url).then(response => response.json()));
     } 
 
