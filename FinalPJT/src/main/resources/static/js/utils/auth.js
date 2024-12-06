@@ -3,7 +3,7 @@ export var errCnt = 0;
 
 export async function getAccessToken() {
     try {
-        const response = await fetch('http://localhost:3000/api/getAccessToken', {
+        const response = await fetch('http://14.63.176.243:3000/api/getAccessToken', {
             method: 'GET'
         });
 
