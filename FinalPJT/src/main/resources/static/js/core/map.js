@@ -82,8 +82,24 @@ function fetchAllData(latitude, longitude, radius) {
             console.error('오류 발생:', error);
         });
 }
+function showLoadingIcon() {
+    const loadingIcon = document.getElementById('loadingIcon');
+    if (loadingIcon) {
+        loadingIcon.style.display = 'block'; // 로딩 아이콘을 표시합니다.
+    }
+}
+
+function hideLoadingIcon() {
+    const loadingIcon = document.getElementById('loadingIcon');
+    if (loadingIcon) {
+        loadingIcon.style.display = 'none'; // 로딩 아이콘을 숨깁니다.
+    }
+}
+
 //AI 추천 기
 function updateAIRecommendations(recommendation) {
+	showLoadingIcon(); 
+	
     const aiIdeaList = document.getElementById("aiIdeaList");
     aiIdeaList.innerHTML = ''; // 기존 추천 목록 초기화
 
